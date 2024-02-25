@@ -1,0 +1,41 @@
+{
+  "name": "mistcss",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "bin": {
+    "mistcss": "lib/bin.js"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "fixtures:type-check": " tsc -p ./fixtures/tsconfig.json",
+    "fixtures:lint-css": "stylelint './fixtures/**/*.css'",
+    "test": "npm run build && node --test && npm run fixtures:type-check && npm run fixtures:lint-css"
+  },
+  "files": [
+    "lib",
+    "!lib/fixtures/**/*",
+    "!lib/**/*.test.*"
+  ],
+  "keywords": [],
+  "author": "typicode <typicode@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@sindresorhus/tsconfig": "^5.0.0",
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.5",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0",
+    "typescript": "^5.3.3",
+    "@typicode/eslint-config": "^2.0.0",
+    "@types/node": "^20.11.19"
+  },
+  "dependencies": {
+    "chokidar": "^3.6.0",
+    "globby": "^14.0.1"
+  }
+}

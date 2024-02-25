@@ -1,0 +1,7 @@
+{
+  "extends": "@sindresorhus/tsconfig",
+  "compilerOptions": {
+    "outDir": "./lib"
+  },
+  "exclude": ["./fixtures"]
+}
