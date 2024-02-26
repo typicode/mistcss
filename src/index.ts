@@ -94,7 +94,6 @@ export function genFile(filename: string) {
   let data = fs.readFileSync(filename, 'utf8')
   const parsedInput = parseInput(data)
   const name = path.basename(filename, '.mist.css')
-  const dir = path.dirname(filename)
   data = render(name, parsedInput)
-  fs.writeFileSync(path.join(dir, `${name}.tsx`), data)
+  fs.writeFileSync(`${filename}.tsx`, data)
 }

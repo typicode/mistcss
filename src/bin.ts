@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs'
+import path from 'node:path'
 import { parseArgs } from 'node:util'
 
 import chokidar from 'chokidar'
@@ -41,5 +42,5 @@ if (fs.statSync(fileOrDir).isFile()) {
   }
 
   // Re-generate all files
-  filenames.forEach(genFile)
+  filenames.forEach((f) => genFile(path.join(cwd, f)))
 }
