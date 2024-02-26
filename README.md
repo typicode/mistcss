@@ -9,7 +9,7 @@
 - Write less and focus on style to avoid context-switching with JS, reducing bugs.
 - Gain automatic type safety for your React components; MistCSS compiles to TSX.
 - Enjoy a zero-runtime experience.
-- Works with Next, Remix, Astro, ... any modern React framework
+- Works with Next, Remix, Astro, ... any modern React framework.
 
 ## Install
 
@@ -78,21 +78,47 @@ export default function App() {
 
 Edit `package.json`:
 
-```
+```json
 {
-	"scripts": {
-		"mistcss-dev": "mistcss ./src --watch",
-		"mistcss-build": "mistcss ./src"
-	}
+  "scripts": {
+    "mistcss-dev": "mistcss ./src --watch",
+    "mistcss-build": "mistcss ./src"
+  }
 }
 ```
 
 Use tools like [concurrently](https://github.com/open-cli-tools/concurrently) to run it alongside your other scripts in development.
 
+### 4. Ignoring generated files
+
 Edit `.gitignore`:
 
 ```gitignore
 *.mist.css.tsx # Ignore compiled files
+```
+
+Edit `.prettierignore`:
+
+```gitignore
+*.mist.css.tsx # Ignore compiled files
+```
+
+Edit `eslint.config.js`:
+
+```js
+{
+  ignores: ['**/*.mist.css.tsx']
+}
+```
+
+Edit `.vscode/settings.json`:
+
+```
+{
+  "files.exclude": {
+    "**/*.mist.css.tsx": true,
+  }
+}
 ```
 
 ## The power of CSS
