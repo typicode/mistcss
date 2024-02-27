@@ -30,21 +30,19 @@ Assuming your React components are in `src/components`, let's create a basic But
   button:scope {
     /* Default style */
     font-size: 1rem;
-    /* ... */
+    border-radius: 0.25rem;
 
     &[data-size='lg'] {
       font-size: 1.5rem;
-      /* ... */
     }
 
     &[data-size='sm'] {
       font-size: 0.75rem;
-      /* ... */
     }
 
     &[data-danger] {
-      color: red;
-      /* ... */
+      background-color: red;
+      color: white;
     }
   }
 }
@@ -72,7 +70,7 @@ export default function App() {
       </Button>
 
       {/* 💥 TypeScript will catch the error here */}
-      <Button size="large">Submit</Button>
+      <Button size="lgg">Submit</Button>
     </main>
   )
 }
@@ -93,7 +91,19 @@ Edit `package.json`:
 
 Use tools like [concurrently](https://github.com/open-cli-tools/concurrently) to run it alongside your other scripts in development.
 
-### 4. Ignoring generated files
+### 4. TailwindCSS (optional)
+
+If you're using NextJS, you may need to add [support for nested declarations](https://tailwindcss.com/docs/using-with-preprocessors#nesting).
+
+Use Tailwind's `@apply` directive to style your CSS component. For example:
+
+```css
+&[data-danger] {
+  @apply bg-red text-white;
+}
+```
+
+### 5. Ignoring generated files
 
 Edit `.gitignore`:
 
@@ -120,20 +130,8 @@ Edit `.vscode/settings.json`:
 ```json
 {
   "files.exclude": {
-    "**/*.mist.css.tsx": true,
+    "**/*.mist.css.tsx": true
   }
-}
-```
-
-### 5. TailwindCSS
-
-If you're using NextJS, you may need to add [support for nested declarations](https://tailwindcss.com/docs/using-with-preprocessors#nesting).
-
-Use Tailwind's `@apply` directive to style your CSS component. For example:
-
-```css
-&[data-danger] {
-  @apply bg-red text-white
 }
 ```
 
