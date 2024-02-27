@@ -12,6 +12,7 @@ void test('parseInput', () => {
   const input: string = mistCss
   const actual: ParsedInput = parseInput(input)
   const expected: ParsedInput = {
+    className: 'button',
     tag: 'button',
     data: {
       size: ['lg', 'sm'],
@@ -20,6 +21,8 @@ void test('parseInput', () => {
   }
   assert.deepStrictEqual(actual, expected)
 })
+
+void test.todo('parseInput with empty input', () => {})
 
 void test('render', () => {
   const name = 'Button'

@@ -2,15 +2,15 @@
   button:scope {
     font-size: 1rem;
 
-    [data-size='lg'] {
+    &[data-size='lg'] {
       font-size: 1.5rem;
     }
 
-    [data-size='sm'] {
+    &[data-size='sm'] {
       font-size: 0.75rem;
     }
 
-    [data-danger] {
+    &[data-danger] {
       color: red;
     }
   }

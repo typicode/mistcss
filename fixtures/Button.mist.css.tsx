@@ -9,7 +9,7 @@ type Props = {
 
 export function Button({ children, size, danger, ...props }: Props) {
   return (
-    <button {...props} data-size={size} data-danger={danger}>
+    <button {...props} className="button" data-size={size} data-danger={danger}>
       {children}
     </button>
   )
