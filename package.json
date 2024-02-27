@@ -12,7 +12,8 @@
     "lint": "eslint .",
     "fixtures:type-check": " tsc -p ./fixtures/tsconfig.json",
     "fixtures:lint-css": "stylelint './fixtures/**/*.css'",
-    "test": "npm run build && node --test && npm run fixtures:type-check && npm run fixtures:lint-css"
+    "test": "npm run build && node --test && npm run fixtures:type-check && npm run fixtures:lint-css",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "lib",
