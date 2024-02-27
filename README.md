@@ -101,7 +101,7 @@ Use Tailwind's `@apply` directive to style your CSS component. For example:
 
 ```css
 &[data-danger] {
-  @apply bg-red text-white;
+  @apply bg-red-700 text-white;
 }
 ```
 
