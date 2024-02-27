@@ -6,7 +6,7 @@ import { parseArgs } from 'node:util'
 import chokidar from 'chokidar'
 import { globby } from 'globby'
 
-import { genFile } from './index.js'
+import { createFile } from './index.js'
 
 const { values, positionals } = parseArgs({
   options: {
@@ -31,16 +31,25 @@ if (!fs.existsSync(fileOrDir)) {
 }
 
 if (fs.statSync(fileOrDir).isFile()) {
-  genFile(fileOrDir)
+  createFile(fileOrDir)
 } else {
   const cwd = fileOrDir || process.cwd()
   const filenames = await globby('**/*.mist.css', { cwd })
 
+  function handleFile(filename: string) {
+    try {
+      createFile(path.join(cwd, filename))
+    } catch (e) {
+      console.error(`Error generating ${filename}`)
+      console.error(e)
+    }
+  }
+
   // Watch files
   if (values.watch) {
-    chokidar.watch('**/*.mist.css', { cwd }).on('change', genFile)
+    chokidar.watch('**/*.mist.css', { cwd }).on('change', handleFile)
   }
 
   // Re-generate all files
-  filenames.forEach((f) => genFile(path.join(cwd, f)))
+  filenames.forEach(handleFile)
 }

@@ -32,17 +32,17 @@ Assuming your React components are in `src/components`, let's create a basic But
     font-size: 1rem;
     /* ... */
 
-    [data-size='lg'] {
+    &[data-size='lg'] {
       font-size: 1.5rem;
       /* ... */
     }
 
-    [data-size='sm'] {
+    &[data-size='sm'] {
       font-size: 0.75rem;
       /* ... */
     }
 
-    [data-danger] {
+    &[data-danger] {
       color: red;
       /* ... */
     }
@@ -62,7 +62,7 @@ mistcss src/components/Button.mist.css
 Now, you can import your React component.
 
 ```tsx
-import { Button } from '.components/Button.mist.css'
+import { Button } from '.components/Button.mist.css.tsx'
 
 export default function App() {
   return (
@@ -144,7 +144,7 @@ MistCSS creates pure CSS atomic components 🌬️
 
 ## Roadmap
 
-MistCSS is a new project, so expect breaking changes until `v1.0`.
+MistCSS is a new project, so expect **breaking changes** until `v1.0`.
 
 If you like this idea and want to help, please consider having your company [sponsor](https://github.com/typicode/mistcss) it 🙇. This project is not backed by a large company.
 

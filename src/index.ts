@@ -2,24 +2,32 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 export interface ParsedInput {
+  className: string
   tag: string
   data: Record<string, string[] | boolean>
 }
 
+const classNameRegex = /@scope\s*\(\s*\.(?<className>\w+)\s*\)/
 const tagRegex = /(?<tag>\w+):scope/
 const enumDataAttributeRegex =
   /\[\s*data-(?<attribute>.*?)\s*=\s*["']?(?<value>.*?)["']?\s*\]/g
 const booleanDataAttributeRegex = /\[\s*data-(?<attribute>.\w*)\s*\]/g
 
 export function parseInput(input: string): ParsedInput {
-  const result: ParsedInput = { tag: '', data: {} }
+  const result: ParsedInput = { className: '', tag: '', data: {} }
+
+  // Parse class name
+  const className = classNameRegex.exec(input)?.groups?.['className']
+  if (className === undefined) {
+    throw new Error('Could not parse class name')
+  }
+  result.className = className
 
   // Parse tag
   const tag = tagRegex.exec(input)?.groups?.['tag']
   if (tag === undefined) {
     throw new Error('Could not parse tag')
   }
-
   result.tag = tag
 
   // Parse enum data attributes
@@ -80,7 +88,9 @@ export function ${name}({ children, ${Object.keys(parsedInput.data).join(
     ', ',
   )}, ...props }: Props) {
   return (
-    <${parsedInput.tag} {...props} ${Object.keys(parsedInput.data)
+    <${parsedInput.tag} {...props} className="${parsedInput.className}" ${Object.keys(
+      parsedInput.data,
+    )
       .map((key) => `data-${key}={${key}}`)
       .join(' ')}>
       {children}
@@ -90,7 +100,7 @@ export function ${name}({ children, ${Object.keys(parsedInput.data).join(
 `
 }
 
-export function genFile(filename: string) {
+export function createFile(filename: string) {
   let data = fs.readFileSync(filename, 'utf8')
   const parsedInput = parseInput(data)
   const name = path.basename(filename, '.mist.css')
