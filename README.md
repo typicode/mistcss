@@ -23,10 +23,12 @@ npm install mistcss --save-dev
 
 ### 1. Create your first CSS component
 
-Assuming your React components are in `src/components`, let's create a basic Button component:
+Assuming your React components are in `src/components`, let's create a basic Button component using CSS.
+
+`src/components/Button.mist.css`
 
 ```css
-@scope (.button) {
+@scope (.btn) {
   button:scope {
     /* Default style */
     font-size: 1rem;
