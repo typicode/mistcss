@@ -21,6 +21,10 @@
     "!lib/**/*.test.*"
   ],
   "keywords": [],
+  "repository": {
+		"type": "git",
+		"url": "git+https://github.com/typicode/mistcss.git"
+	},
   "author": "typicode <typicode@gmail.com>",
   "license": "MIT",
   "devDependencies": {
