@@ -70,7 +70,9 @@ export default function App() {
       <Button size="lg" danger>
         OMG 😱 JS from CSS
       </Button>
-      <Button size="large">Submit</Button> {/* 💥 TypeScript will catch the error here */}
+
+      {/* 💥 TypeScript will catch the error here */}
+      <Button size="large">Submit</Button>
     </main>
   )
 }
@@ -123,6 +125,18 @@ Edit `.vscode/settings.json`:
 }
 ```
 
+### 5. TailwindCSS
+
+If you're using NextJS, you may need to add [support for nested declarations](https://tailwindcss.com/docs/using-with-preprocessors#nesting).
+
+Use Tailwind's `@apply` directive to style your CSS component. For example:
+
+```
+&[data-danger] {
+  @apply bg-red text-white
+}
+```
+
 ## The power of CSS
 
 Since MistCSS uses pure CSS, you can use **all** CSS features:
@@ -149,7 +163,7 @@ MistCSS is a new project, so expect **breaking changes** until `v1.0`.
 If you like this idea and want to help, please consider having your company [sponsor](https://github.com/typicode/mistcss) it 🙇. This project is not backed by a large company.
 
 - [x] Release 🥳
-- [ ] Add TailwindCSS support
+- [x] Add TailwindCSS support
 - [ ] Add Vite support
 - [ ] CLI and compiler improvements
 - [ ] v1.0
