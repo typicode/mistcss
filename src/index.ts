@@ -65,12 +65,12 @@ function renderProps(parsedInput: ParsedInput): string {
     .map((attribute) => {
       const values = parsedInput.data[attribute]
       if (Array.isArray(values)) {
-        return `${attribute}: ${values
+        return `${attribute}?: ${values
           .map((value) => `'${value}'`)
           .join(' | ')}`
       }
 
-      return `  ${attribute}: boolean`
+      return `  ${attribute}?: boolean`
     })
     .join('\n')
 }
@@ -80,7 +80,7 @@ export function render(name: string, parsedInput: ParsedInput): string {
 import './${name}.mist.css'
 
 type Props = {
-  children: React.ReactNode
+  children?: React.ReactNode
   ${renderProps(parsedInput)}
 }
 
