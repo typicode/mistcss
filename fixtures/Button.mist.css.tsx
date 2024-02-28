@@ -2,9 +2,9 @@
 import './Button.mist.css'
 
 type Props = {
-  children: React.ReactNode
-  size: 'lg' | 'sm'
-  danger: boolean
+  children?: React.ReactNode
+  size?: 'lg' | 'sm'
+  danger?: boolean
 }
 
 export function Button({ children, size, danger, ...props }: Props) {
