@@ -62,7 +62,7 @@ mistcss src/components/Button.mist.css
 Now, you can import your React component.
 
 ```tsx
-import { Button } from '.components/Button.mist.css.tsx'
+import { Button } from '.components/Button.mist.css'
 
 export default function App() {
   return (
