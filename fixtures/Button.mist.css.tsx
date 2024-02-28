@@ -5,7 +5,7 @@ type Props = {
   children?: React.ReactNode
   size?: 'lg' | 'sm'
   danger?: boolean
-}
+} & JSX.IntrinsicElements['button']
 
 export function Button({ children, size, danger, ...props }: Props) {
   return (
