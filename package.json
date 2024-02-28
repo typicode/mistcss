@@ -1,6 +1,6 @@
 {
   "name": "mistcss",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "",
   "type": "module",
   "bin": {
@@ -22,9 +22,9 @@
   ],
   "keywords": [],
   "repository": {
-		"type": "git",
-		"url": "git+https://github.com/typicode/mistcss.git"
-	},
+    "type": "git",
+    "url": "git+https://github.com/typicode/mistcss.git"
+  },
   "author": "typicode <typicode@gmail.com>",
   "license": "MIT",
   "devDependencies": {
