@@ -82,7 +82,7 @@ import './${name}.mist.css'
 type Props = {
   children?: React.ReactNode
   ${renderProps(parsedInput)}
-}
+} & JSX.IntrinsicElements['${parsedInput.tag}']
 
 export function ${name}({ children, ${Object.keys(parsedInput.data).join(
     ', ',
