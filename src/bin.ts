@@ -8,6 +8,14 @@ import { globby } from 'globby'
 
 import { createFile } from './index.js'
 
+function genToMistFilename(genFilename: string) {
+  return genFilename.replace(/\.tsx$/, '')
+}
+
+function mistToGenFilename(mistFilename: string) {
+  return `${mistFilename}.tsx`
+}
+
 const { values, positionals } = parseArgs({
   options: {
     watch: {
@@ -34,9 +42,14 @@ if (fs.statSync(fileOrDir).isFile()) {
   createFile(fileOrDir)
 } else {
   const cwd = fileOrDir || process.cwd()
-  const filenames = await globby('**/*.mist.css', { cwd })
 
-  function handleFile(filename: string) {
+  const mistGlob = '**/*.mist.css'
+  const genGlob = '**/*.mist.css.tsx'
+
+  const mistFiles = await globby(mistGlob, { cwd })
+  const genFiles = await globby(genGlob, { cwd })
+
+  function handleMistFileUpdate(filename: string) {
     try {
       createFile(path.join(cwd, filename))
     } catch (e) {
@@ -45,11 +58,31 @@ if (fs.statSync(fileOrDir).isFile()) {
     }
   }
 
+  function handleMistFileDelete(filename: string) {
+    const genFilename = mistToGenFilename(filename)
+    if (fs.existsSync(path.join(cwd, genFilename))) {
+      fs.unlinkSync(path.join(cwd, genFilename))
+    }
+  }
+
+  function handleGenFileWithoutMistFile(filename: string) {
+    const mistFilename = genToMistFilename(filename)
+    if (!fs.existsSync(path.join(cwd, mistFilename))) {
+      fs.unlinkSync(path.join(cwd, filename))
+    }
+  }
+
   // Watch files
   if (values.watch) {
-    chokidar.watch('**/*.mist.css', { cwd }).on('change', handleFile)
+    chokidar
+      .watch(mistGlob, { cwd })
+      .on('change', handleMistFileUpdate)
+      .on('unlink', handleMistFileDelete)
   }
 
   // Re-generate all files
-  filenames.forEach(handleFile)
+  mistFiles.forEach(handleMistFileUpdate)
+
+  // Clean up generated files without a corresponding mist file
+  genFiles.forEach((genFilename) => handleGenFileWithoutMistFile(genFilename)
 }

@@ -13,7 +13,10 @@
     "fixtures:type-check": " tsc -p ./fixtures/tsconfig.json",
     "fixtures:lint-css": "stylelint './fixtures/**/*.css'",
     "test": "npm run build && node --test && npm run fixtures:type-check && npm run fixtures:lint-css",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "files": [
     "lib",
@@ -29,15 +32,16 @@
   "license": "MIT",
   "devDependencies": {
     "@sindresorhus/tsconfig": "^5.0.0",
+    "@types/node": "^20.11.19",
     "@types/react": "^18.2.56",
     "@types/react-dom": "^18.2.19",
+    "@typicode/eslint-config": "^2.0.0",
     "eslint": "^8.56.0",
     "prettier": "^3.2.5",
     "stylelint": "^16.2.1",
     "stylelint-config-standard": "^36.0.0",
     "typescript": "^5.3.3",
-    "@typicode/eslint-config": "^2.0.0",
-    "@types/node": "^20.11.19"
+    "vitepress": "^1.0.0-rc.44"
   },
   "dependencies": {
     "chokidar": "^3.6.0",

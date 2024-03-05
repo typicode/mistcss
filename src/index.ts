@@ -103,7 +103,9 @@ export function ${name}({ children, ${Object.keys(parsedInput.data).join(
 export function createFile(filename: string) {
   let data = fs.readFileSync(filename, 'utf8')
   const parsedInput = parseInput(data)
+
   const name = path.basename(filename, '.mist.css')
   data = render(name, parsedInput)
+  
   fs.writeFileSync(`${filename}.tsx`, data)
 }
