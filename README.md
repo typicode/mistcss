@@ -25,8 +25,12 @@ Supports Next.js, Remix and TailwindCSS. More to come.
 ```jsx
 import { Paragraph } from 'Paragraph.mist.css'
 
-<Paragraph>I'm React component written in CSS only</Paragraph>
-<Paragraph error>I can accept props</Paragraph>
+export default const App = () => (
+  <main>
+    <Paragraph>I'm React component written in CSS only</Paragraph>
+    <Paragraph error>I can accept props</Paragraph>
+  </main>
+)
 ```
 
 ## Documentation
