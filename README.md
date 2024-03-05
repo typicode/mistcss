@@ -12,7 +12,7 @@ Supports Next.js, Remix and TailwindCSS. More to come.
 
 ```css
 @scope (.paragraph) {
-  p {
+  p:scope {
     color: black;
 
     [data-error] {
