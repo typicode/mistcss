@@ -20,8 +20,7 @@ const { values, positionals } = parseArgs({
   options: {
     watch: {
       type: 'boolean',
-      alias: 'w',
-      default: false,
+      short: 'w',
     },
   },
   allowPositionals: true,
@@ -84,5 +83,5 @@ if (fs.statSync(fileOrDir).isFile()) {
   mistFiles.forEach(handleMistFileUpdate)
 
   // Clean up generated files without a corresponding mist file
-  genFiles.forEach((genFilename) => handleGenFileWithoutMistFile(genFilename)
+  genFiles.forEach((genFilename) => handleGenFileWithoutMistFile(genFilename))
 }
