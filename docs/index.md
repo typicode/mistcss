@@ -26,7 +26,7 @@ features:
     details: No more context switching with JS/TS code. Use all modern CSS features directly.
   - icon: 💎
     title: Improve your codebase
-    details: Automatic type safety. Better separation of visual components and complex ones.
+    details: Automatic type safety. Clean separation between visual, state-less components and others. Guaranteed by the language.
   - icon: 😃
     title: Perfect DX
     details: No need to add extensions to VScode. No need to learn a new API. Zero-config. Get set up in 1 minute.
