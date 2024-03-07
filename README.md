@@ -10,6 +10,8 @@ View the [site](https://typicode.github.io/mistcss) to learn more.
 
 Supports Next.js, Remix and TailwindCSS. More to come.
 
+`Paragraph.mist.css`
+
 ```css
 @scope (.paragraph) {
   p:scope {
@@ -21,6 +23,8 @@ Supports Next.js, Remix and TailwindCSS. More to come.
   }
 }
 ```
+
+`App.jsx`
 
 ```jsx
 import { Paragraph } from 'Paragraph.mist.css'
