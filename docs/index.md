@@ -6,9 +6,9 @@ hero:
   name: MistCSS
   text: Write React components using CSS only
   tagline: A new, better and faster way to write visual components. <strike>CSS-in-JS</strike>? Nope! JS-from-CSS 👍
-  image:
-    light: /App.tsx_light.svg
-    dark: /App.tsx_dark.svg
+  # image:
+  #   light: /App.tsx_light.svg
+  #   dark: /App.tsx_dark.svg
   actions:
     - theme: brand
       text: Get Started
@@ -34,15 +34,3 @@ features:
     title: Fast
     details: No performance cost, zero runtime and native browser support.
 ---
-
-<style>
-.VPHero .VPImage {
-  max-width: 90%;
-  max-height: 100%;
-}
-
-.VPHero .image-container {
-  transform: none;
-  width: 500px;
-}
-</style>
