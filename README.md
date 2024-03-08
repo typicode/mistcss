@@ -17,7 +17,7 @@ Supports Next.js, Remix and TailwindCSS. More to come.
   p:scope {
     color: black;
 
-    [data-error] {
+    &[data-error] {
       color: red;
     }
   }
