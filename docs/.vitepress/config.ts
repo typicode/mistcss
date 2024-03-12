@@ -18,13 +18,15 @@ export default defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     logo: '/logo.svg',
     nav: [
-      { text: 'Guide', link: '/getting-started' },
+      { text: 'Guide', link: '/introduction' },
       { text: 'Sponsor', link: 'https://github.com/sponsors/typicode' },
     ],
 
     sidebar: [
+      { text: 'Introduction', link: '/introduction' },
       { text: 'Getting Started', link: '/getting-started' },
       { text: 'Integrate to your Workflow', link: '/workflow' },
+      { text: 'How to', link: '/how-to' },
       { text: 'Roadmap', link: '/roadmap' },
     ],
 

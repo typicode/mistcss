@@ -1,0 +1,48 @@
+# How to
+
+## Logical operators with CSS
+
+```css
+/* props.foo === 'x' && props.bar === 'y' */
+&[data-foo='x']&[data-bar='y'] {
+  /* ... */
+}
+```
+
+```css
+/* props.foo === 'x' || props.bar === 'y' */
+&[data-foo='x'],
+&[data-bar='y'] {
+  /* ... */
+}
+```
+
+You can also use `:not()`.
+
+## Add state
+
+If you need to add state, you can wrap your MistCSS component:
+
+```jsx
+import { Button } from './Button.mist.css'
+
+export function ButtonCount(props) {
+  const [count, setCount] = useState(0)
+  return <Button onClick={() => setCount(count + 1)}>{count}</Button>
+}
+```
+
+## Add state
+
+To incorporate state, simply wrap your MistCSS component:
+
+```jsx
+import { Button } from './Button.mist.css'
+
+export function ButtonCount(props) {
+  const [count, setCount] = useState(0)
+  return <Button onClick={() => setCount(count + 1)}>{count}</Button>
+}
+```
+
+You can also rename `Button.mist.css` to `_Button.mist.css` to indicate that it shouldn't be used directly.
