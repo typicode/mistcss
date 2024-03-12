@@ -32,10 +32,11 @@ import { Paragraph } from 'Paragraph.mist.css'
 export default const App = () => (
   <main>
     <Paragraph>I'm a React component written in CSS only</Paragraph>
-    <Paragraph error>I can accept props</Paragraph>
+    <Paragraph error>props can be passed</Paragraph>
+
     {/* 💥 TypeScript will catch errors */}
     <Paragraph eror>typo</Paragraph>
-    <Paragraph type="button">invalid prop for p</Paragraph>
+    <Paragraph type="button">invalid prop</Paragraph>
   </main>
 )
 ```

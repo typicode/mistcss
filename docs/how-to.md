@@ -21,19 +21,6 @@ You can also use `:not()`.
 
 ## Add state
 
-If you need to add state, you can wrap your MistCSS component:
-
-```jsx
-import { Button } from './Button.mist.css'
-
-export function ButtonCount(props) {
-  const [count, setCount] = useState(0)
-  return <Button onClick={() => setCount(count + 1)}>{count}</Button>
-}
-```
-
-## Add state
-
 To incorporate state, simply wrap your MistCSS component:
 
 ```jsx
