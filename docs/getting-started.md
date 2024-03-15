@@ -65,7 +65,7 @@ Let's create a classic `Button` component accepting two props:
     @apply text-md rounded-sm;
 
     &[data-size='lg'] {
-      @apply text-lg:;
+      @apply text-lg;
     }
 
     &[data-size='sm'] {
