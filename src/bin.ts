@@ -16,6 +16,19 @@ function mistToGenFilename(mistFilename: string) {
   return `${mistFilename}.tsx`
 }
 
+function safeCreateFile(mistFilename: string) {
+  try {
+    createFile(mistFilename)
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(`Error ${mistFilename}: ${e.message}`)
+    } else {
+      console.error(`Error ${mistFilename}`)
+      console.error(e)
+    }
+  }
+}
+
 const { values, positionals } = parseArgs({
   options: {
     watch: {
@@ -38,7 +51,7 @@ if (!fs.existsSync(fileOrDir)) {
 }
 
 if (fs.statSync(fileOrDir).isFile()) {
-  createFile(fileOrDir)
+  safeCreateFile(fileOrDir)
 } else {
   const cwd = fileOrDir || process.cwd()
 
@@ -49,12 +62,7 @@ if (fs.statSync(fileOrDir).isFile()) {
   const genFiles = await globby(genGlob, { cwd })
 
   function handleMistFileUpdate(filename: string) {
-    try {
-      createFile(path.join(cwd, filename))
-    } catch (e) {
-      console.error(`Error generating ${filename}`)
-      console.error(e)
-    }
+    safeCreateFile(filename)
   }
 
   function handleMistFileDelete(filename: string) {
