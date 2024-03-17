@@ -62,7 +62,7 @@ if (fs.statSync(fileOrDir).isFile()) {
   const genFiles = await globby(genGlob, { cwd })
 
   function handleMistFileUpdate(filename: string) {
-    safeCreateFile(filename)
+    safeCreateFile(path.join(cwd, filename))
   }
 
   function handleMistFileDelete(filename: string) {
