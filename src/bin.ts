@@ -9,11 +9,11 @@ import { globby } from 'globby'
 import { createFile } from './index.js'
 
 function genToMistFilename(genFilename: string) {
-  return genFilename.replace(/\.tsx$/, '')
+  return genFilename.replace(/\.tsx$/, '.css')
 }
 
 function mistToGenFilename(mistFilename: string) {
-  return `${mistFilename}.tsx`
+  return mistFilename.replace(/\.css$/, '.tsx')
 }
 
 function safeCreateFile(mistFilename: string) {
@@ -56,7 +56,7 @@ if (fs.statSync(fileOrDir).isFile()) {
   const cwd = fileOrDir || process.cwd()
 
   const mistGlob = '**/*.mist.css'
-  const genGlob = '**/*.mist.css.tsx'
+  const genGlob = '**/*.mist.tsx'
 
   const mistFiles = await globby(mistGlob, { cwd })
   const genFiles = await globby(genGlob, { cwd })

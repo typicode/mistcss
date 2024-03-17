@@ -6,7 +6,7 @@ import { type ParsedInput, parseInput, render } from './index.js'
 
 // Fixtures
 const mistCss: string = fs.readFileSync('fixtures/Button.mist.css', 'utf-8')
-const tsx: string = fs.readFileSync('fixtures/Button.mist.css.tsx', 'utf-8')
+const tsx: string = fs.readFileSync('fixtures/Button.mist.tsx', 'utf-8')
 
 void test('parseInput', () => {
   const input: string = mistCss
@@ -31,7 +31,7 @@ void test('render', () => {
   const expected: string = tsx
   if (process.env['UPDATE']) {
     console.log('Updating fixtures')
-    fs.writeFileSync(`fixtures/${name}.mist.css.tsx`, render(name, parsedInput))
+    fs.writeFileSync(`fixtures/${name}.mist.tsx`, render(name, parsedInput))
   }
   assert.strictEqual(actual, expected)
 })

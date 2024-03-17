@@ -93,13 +93,14 @@ Run `mistcss` command:
 
 ```shell
 npx mistcss ./src
+# Button.mist.tsx will be created
 ```
 
 You can now import your `Button` component like this:
 
 <!-- prettier-ignore-start -->
 ```tsx
-import { Button } from '.components/Button.mist.css'
+import { Button } from '.components/Button.mist'
 
 export default const App = () => (
   <main>

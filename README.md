@@ -27,7 +27,7 @@ Supports Next.js, Remix and TailwindCSS. More to come.
 `App.jsx`
 
 ```jsx
-import { Paragraph } from 'Paragraph.mist.css'
+import { Paragraph } from 'Paragraph.mist'
 
 export default const App = () => (
   <main>

@@ -11,8 +11,8 @@ hero:
   #   dark: /App.tsx_dark.svg
   actions:
     - theme: brand
-      text: Get Started
-      link: /getting-started
+      text: Docs
+      link: /introduction
     - theme: alt
       text: View on GitHub
       link: https://github.com/typicode/mistcss
