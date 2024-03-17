@@ -45,20 +45,20 @@ Since components are generated and shouldn't be edited, there's no need to versi
 Edit `.gitignore`:
 
 ```gitignore
-*.mist.css.tsx # Ignore compiled files
+*.mist.tsx # Ignore compiled files
 ```
 
 Edit `.prettierignore`:
 
 ```gitignore
-*.mist.css.tsx # Ignore compiled files
+*.mist.tsx # Ignore compiled files
 ```
 
 Edit `eslint.config.js`:
 
 ```js
 {
-  ignores: ['**/*.mist.css.tsx']
+  ignores: ['**/*.mist.tsx']
 }
 ```
 
@@ -67,7 +67,7 @@ Edit `.vscode/settings.json`:
 ```json
 {
   "files.exclude": {
-    "**/*.mist.css.tsx": true
+    "**/*.mist.tsx": true
   }
 }
 ```
