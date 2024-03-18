@@ -1,5 +1,6 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { compile, Element } from 'stylis'
 
 export interface ParsedInput {
   className: string
@@ -7,55 +8,77 @@ export interface ParsedInput {
   data: Record<string, string[] | boolean>
 }
 
-const classNameRegex = /@scope\s*\(\s*\.(?<className>\w+)\s*\)/
-const tagRegex = /(?<tag>\w+):scope/
 const enumDataAttributeRegex =
-  /\[\s*data-(?<attribute>.*?)\s*=\s*["']?(?<value>.*?)["']?\s*\]/g
-const booleanDataAttributeRegex = /\[\s*data-(?<attribute>.\w*)\s*\]/g
+  /\[data-(?<attribute>[a-z-]+)='(?<value>[^']*)'\]/g
+const booleanDataAttributeRegex = /\[data-(?<attribute>[a-z-]+)(?=\])/g
+
+function visit(nodes: Element[], arr: { type: string; props: string[] }[]) {
+  for (const node of nodes) {
+    if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
+      arr.push({ type: node.type, props: node.props })
+    }
+
+    if (Array.isArray(node.children)) {
+      visit(node.children, arr)
+    }
+  }
+}
 
 export function parseInput(input: string): ParsedInput {
   const result: ParsedInput = { className: '', tag: '', data: {} }
 
-  // Parse class name
-  const className = classNameRegex.exec(input)?.groups?.['className']
-  if (className === undefined) {
-    throw new Error('Could not parse class name')
-  }
-  result.className = className
+  const arr: { type: string; props: string[] }[] = []
+  visit(compile(input), arr)
 
-  // Parse tag
-  const tag = tagRegex.exec(input)?.groups?.['tag']
-  if (tag === undefined) {
-    throw new Error('Could not parse tag')
-  }
-  result.tag = tag
-
-  // Parse enum data attributes
-  for (const match of input.matchAll(enumDataAttributeRegex)) {
-    const attribute = match.groups?.['attribute']
-    const value = match.groups?.['value'] ?? ''
-
-    if (attribute === undefined) {
-      continue
+  arr.forEach((node) => {
+    if (node.type === '@scope') {
+      const prop = node.props[0]
+      if (prop === undefined) {
+        return
+      }
+      result.className = prop.replace('(.', '').replace(')', '')
+      return
     }
 
-    result.data[attribute] ||= []
+    if (node.type === 'rule') {
+      const prop = node.props[0]
+      if (prop === undefined) {
+        return
+      }
 
-    const attr = result.data[attribute]
-    if (Array.isArray(attr) && !attr.includes(value)) {
-      attr.push(value)
+      // Parse tag
+      if (prop.endsWith(':scope')) {
+        result.tag = prop.replace(':scope', '')
+      }
+
+      // Parse enum data attributes
+      for (const match of prop.matchAll(enumDataAttributeRegex)) {
+        const attribute = match.groups?.['attribute']
+        const value = match.groups?.['value'] ?? ''
+
+        if (attribute === undefined) {
+          continue
+        }
+
+        result.data[attribute] ||= []
+
+        const attr = result.data[attribute]
+        if (Array.isArray(attr) && !attr.includes(value)) {
+          attr.push(value)
+        }
+      }
+
+      // Parse boolean data attributes
+      for (const match of prop.matchAll(booleanDataAttributeRegex)) {
+        const attribute = match.groups?.['attribute']
+        if (attribute === undefined) {
+          continue
+        }
+
+        result.data[attribute] ||= true
+      }
     }
-  }
-
-  // Parse boolean data attributes
-  for (const match of input.matchAll(booleanDataAttributeRegex)) {
-    const attribute = match.groups?.['attribute']
-    if (attribute === undefined) {
-      continue
-    }
-
-    result.data[attribute] ||= true
-  }
+  })
 
   return result
 }
@@ -106,6 +129,6 @@ export function createFile(filename: string) {
 
   const name = path.basename(filename, '.mist.css')
   data = render(name, parsedInput)
-  
+
   fs.writeFileSync(`${filename}.tsx`, data)
 }
