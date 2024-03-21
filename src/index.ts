@@ -36,7 +36,6 @@ export function parseInput(input: string): Components {
 
   let name
   const nodes = visit(compile(input))
-  console.log(nodes)
   for (const node of nodes) {
     // Parse name
     if (node.type === '@scope') {

@@ -26,6 +26,10 @@ void test('parseInput', () => {
         x: true,
       },
     },
+    Baz: {
+      tag: 'p',
+      data: {},
+    },
   }
   assert.deepStrictEqual(actual, expected)
 })
