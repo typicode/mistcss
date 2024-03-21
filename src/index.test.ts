@@ -2,21 +2,29 @@ import assert from 'node:assert'
 import fs from 'node:fs'
 import test from 'node:test'
 
-import { type ParsedInput, parseInput, render } from './index.js'
+import { type Components, parseInput, render } from './index.js'
 
 // Fixtures
-const mistCss: string = fs.readFileSync('fixtures/Button.mist.css', 'utf-8')
-const tsx: string = fs.readFileSync('fixtures/Button.mist.tsx', 'utf-8')
+const mistCss: string = fs.readFileSync('fixtures/Foo.mist.css', 'utf-8')
+const tsx: string = fs.readFileSync('fixtures/Foo.mist.tsx', 'utf-8')
 
 void test('parseInput', () => {
   const input: string = mistCss
-  const actual: ParsedInput = parseInput(input)
-  const expected: ParsedInput = {
-    className: 'button',
-    tag: 'button',
-    data: {
-      size: ['lg', 'sm'],
-      danger: true,
+  const actual: Components = parseInput(input)
+  const expected: Components = {
+    Foo: {
+      tag: 'div',
+      data: {
+        fooSize: ['lg', 'sm'],
+        x: true,
+      },
+    },
+    Bar: {
+      tag: 'span',
+      data: {
+        barSize: ['lg'],
+        x: true,
+      },
     },
   }
   assert.deepStrictEqual(actual, expected)
@@ -25,8 +33,8 @@ void test('parseInput', () => {
 void test.todo('parseInput with empty input', () => {})
 
 void test('render', () => {
-  const name = 'Button'
-  const parsedInput: ParsedInput = parseInput(mistCss)
+  const name = 'Foo'
+  const parsedInput: Components = parseInput(mistCss)
   const actual = render(name, parsedInput)
   const expected: string = tsx
   if (process.env['UPDATE']) {

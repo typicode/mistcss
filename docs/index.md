@@ -20,7 +20,7 @@ hero:
 features:
   - icon: 🌐
     title: Universal
-    details: 'Supports Next.js, TailwindCSS, Remix, ... (more to come).'
+    details: Supports Next.js, TailwindCSS, Remix, ... (more to come).
   - icon: 🌸
     title: Focus on the Style
     details: No more context switching with JS/TS code. Use all modern CSS features directly.
