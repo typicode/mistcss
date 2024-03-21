@@ -131,7 +131,7 @@ Of course, you can also use TailwindCSS utility classes in your MistCSS componen
 
 ## Next step
 
-Visit the [worfklow](workflow) section to see how to automatically run `mistcss` as part your dev workflow.
+Visit the [workflow](workflow) section to see how to automatically run `mistcss` as part your dev workflow.
 
 ## Support
 
