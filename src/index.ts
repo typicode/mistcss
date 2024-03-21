@@ -107,9 +107,11 @@ type Props = {
   ${renderProps(parsedInput)}
 } & JSX.IntrinsicElements['${parsedInput.tag}']
 
-export function ${name}({ children, ${Object.keys(parsedInput.data).join(
-    ', ',
-  )}, ...props }: Props) {
+export function ${name}({ ${[
+    'children',
+    ...Object.keys(parsedInput.data),
+    '...props',
+  ].join(', ')} }: Props) {
   return (
     <${parsedInput.tag} {...props} className="${parsedInput.className}" ${Object.keys(
       parsedInput.data,
