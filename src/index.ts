@@ -8,7 +8,7 @@ export type Components = Record<string, Component>
 
 export interface Component {
   tag: string
-  data: Record<string, string[] | boolean>
+  data: Record<string, Set<string> | boolean>
 }
 
 const enumDataAttributeRegex =
@@ -82,10 +82,10 @@ export function parseInput(input: string): Components {
           )
 
           // Initialize data if it doesn't exist
-          component.data[camelCasedAttribute] ||= []
+          component.data[camelCasedAttribute] ||= new Set<string>();
           const attr = component.data[camelCasedAttribute]
-          if (Array.isArray(attr) && !attr.includes(value)) {
-            attr.push(value)
+          if (attr instanceof Set && !attr.has(value)) {
+            attr.add(value)
           }
         }
       }
