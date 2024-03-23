@@ -16,14 +16,14 @@ void test('parseInput', () => {
     Foo: {
       tag: 'div',
       data: {
-        fooSize: ['lg', 'sm'],
+        fooSize: new Set(['lg', 'sm']),
         x: true,
       },
     },
     Bar: {
       tag: 'span',
       data: {
-        barSize: ['lg'],
+        barSize: new Set(['lg']),
         x: true,
       },
     },
