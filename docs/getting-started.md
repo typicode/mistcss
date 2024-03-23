@@ -62,7 +62,7 @@ Let's create a classic `Button` component accepting two props:
 @scope (.button) {
   button:scope {
     /* Default style */
-    @apply text-md rounded-sm;
+    @apply text-base rounded-sm;
 
     &[data-size='lg'] {
       @apply text-lg;
@@ -73,7 +73,7 @@ Let's create a classic `Button` component accepting two props:
     }
 
     &[data-danger] {
-      @apply bg-red-700 @text-white;
+      @apply bg-red-700 text-white;
     }
   }
 }
