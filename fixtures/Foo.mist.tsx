@@ -36,7 +36,7 @@ type BazProps = {
 
 export function Baz({ children, ...props }: BazProps) {
   return (
-    <p {...props} className="Baz" >
+    <p {...props} className="Baz">
       {children}
     </p>
   )

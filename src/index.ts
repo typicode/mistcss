@@ -140,11 +140,12 @@ export function ${name}({ ${[
     '...props',
   ].join(', ')} }: ${name}Props) {
   return (
-    <${component.tag} {...props} className="${name}" ${Object.keys(
-      component.data,
-    )
-      .map((key) => `data-${key}={${key}}`)
-      .join(' ')}>
+    <${[
+      component.tag,
+      '{...props}',
+      `className="${name}"`,
+      ...Object.keys(component.data).map((key) => `data-${key}={${key}}`),
+    ].join(' ')}>
       {children}
     </${component.tag}>
   )
