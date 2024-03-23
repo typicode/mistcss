@@ -170,5 +170,5 @@ export function createFile(filename: string) {
   const name = path.basename(filename, '.mist.css')
   data = render(name, parsedInput)
 
-  fs.writeFileSync(`${filename}.tsx`, data)
+  fs.writeFileSync(filename.replace('.css', '.tsx'), data)
 }
