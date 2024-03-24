@@ -31,7 +31,6 @@ export function Bar({ children, barSize, x, ...props }: BarProps) {
 
 type BazProps = {
   children?: React.ReactNode
-  
 } & JSX.IntrinsicElements['p']
 
 export function Baz({ children, ...props }: BazProps) {
