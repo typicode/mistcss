@@ -6,28 +6,11 @@ import { parseArgs } from 'node:util'
 import chokidar from 'chokidar'
 import { globby } from 'globby'
 
-import { createFile } from './index.js'
-
-function genToMistFilename(genFilename: string) {
-  return genFilename.replace(/\.tsx$/, '.css')
-}
-
-function mistToGenFilename(mistFilename: string) {
-  return mistFilename.replace(/\.css$/, '.tsx')
-}
-
-function safeCreateFile(mistFilename: string) {
-  try {
-    createFile(mistFilename)
-  } catch (e) {
-    if (e instanceof Error) {
-      console.error(`Error ${mistFilename}: ${e.message}`)
-    } else {
-      console.error(`Error ${mistFilename}`)
-      console.error(e)
-    }
-  }
-}
+import {
+  genToMistFilename,
+  mistToGenFilename,
+  safeCreateFile,
+} from './writer.js'
 
 const { values, positionals } = parseArgs({
   options: {
