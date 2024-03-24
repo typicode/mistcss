@@ -12,6 +12,18 @@ const enumDataAttributeRegex =
   /\[data-(?<attribute>[a-z-]+)='(?<value>[^']*)'\]/g
 const booleanDataAttributeRegex = /\[data-(?<attribute>[a-z-]+)(?=\])/g
 
+const pascalCaseRegex = /(?:^|-)([a-z])/g
+
+export function pascalCase(str: string): string {
+  return str.replace(pascalCaseRegex, (_, g) => g.toUpperCase())
+}
+
+const camelCaseRegex = /-([a-z])/g
+
+export function camelCase(str: string): string {
+  return str.replace(camelCaseRegex, (g) => g[1]?.toUpperCase() ?? '')
+}
+
 // Visit all nodes in the AST and return @scope and rule nodes
 function visit(nodes: Element[]): { type: string; props: string[] }[] {
   let result: { type: string; props: string[] }[] = []
@@ -42,8 +54,7 @@ export function parseInput(input: string): Components {
         throw new Error('Invalid MistCSS file, no class found in @scope')
       }
       name = prop.replace('(.', '').replace(')', '')
-      // Convert to PascalCase
-      name = name.replace(/(?:^|-)([a-z])/g, (_, g) => g.toUpperCase())
+      name = pascalCase(name)
       components[name] = { tag: '', data: {} }
       continue
     }
@@ -76,10 +87,7 @@ export function parseInput(input: string): Components {
         }
 
         // Convert to camelCase
-        const camelCasedAttribute = attribute.replace(
-          /-([a-z])/g,
-          (g) => g[1]?.toUpperCase() ?? '',
-        )
+        const camelCasedAttribute = camelCase(attribute)
 
         // Initialize data if it doesn't exist
         component.data[camelCasedAttribute] ||= []
