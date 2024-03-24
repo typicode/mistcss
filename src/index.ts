@@ -110,17 +110,22 @@ export function parseInput(input: string): Components {
 }
 
 function renderProps(component: Component): string {
-  return Object.keys(component.data)
-    .map((attribute) => {
-      const values = component.data[attribute]
-      if (Array.isArray(values)) {
-        return `${attribute}?: ${values
-          .map((value) => `'${value}'`)
-          .join(' | ')}`
+  return Object.entries({
+    children: 'React.ReactNode',
+    ...component.data,
+  })
+    .map(([key, value]) => {
+      if (key === 'children') {
+        return `${key}?: ${value}`
       }
 
-      return `  ${attribute}?: boolean`
+      if (Array.isArray(value)) {
+        return `${key}?: ${value.map((v) => `'${v}'`).join(' | ')}`
+      }
+
+      return `${key}?: boolean`
     })
+    .map((line) => `  ${line}`)
     .join('\n')
 }
 
@@ -130,8 +135,7 @@ function renderComponent(components: Components, name: string): string {
     return ''
   }
   return `type ${name}Props = {
-  children?: React.ReactNode
-  ${renderProps(component)}
+${renderProps(component)}
 } & JSX.IntrinsicElements['${component.tag}']
 
 export function ${name}({ ${[
