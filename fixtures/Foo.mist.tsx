@@ -9,7 +9,7 @@ type FooProps = {
 
 export function Foo({ children, fooSize, x, ...props }: FooProps) {
   return (
-    <div {...props} className="Foo" data-fooSize={fooSize} data-x={x}>
+    <div {...props} className="foo" data-fooSize={fooSize} data-x={x}>
       {children}
     </div>
   )
@@ -23,7 +23,7 @@ type BarProps = {
 
 export function Bar({ children, barSize, x, ...props }: BarProps) {
   return (
-    <span {...props} className="Bar" data-barSize={barSize} data-x={x}>
+    <span {...props} className="bar" data-barSize={barSize} data-x={x}>
       {children}
     </span>
   )
@@ -35,7 +35,7 @@ type BazProps = {
 
 export function Baz({ children, ...props }: BazProps) {
   return (
-    <p {...props} className="Baz">
+    <p {...props} className="baz">
       {children}
     </p>
   )
