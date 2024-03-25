@@ -6,6 +6,7 @@ export type Components = Record<string, Component>
 export type Component = {
   tag: string
   data: Record<string, string[] | boolean>
+  className?: string;
 }
 
 const enumDataAttributeRegex =
@@ -45,6 +46,7 @@ export function parseInput(input: string): Components {
   const components: Components = {}
 
   let name
+  let className
   const nodes = visit(compile(input))
   for (const node of nodes) {
     // Parse name
@@ -53,9 +55,9 @@ export function parseInput(input: string): Components {
       if (prop === undefined) {
         throw new Error('Invalid MistCSS file, no class found in @scope')
       }
-      name = prop.replace('(.', '').replace(')', '')
-      name = pascalCase(name)
-      components[name] = { tag: '', data: {} }
+      className = prop.replace('(.', '').replace(')', '')
+      name = pascalCase(className)
+      components[name] = { tag: '', data: {}, className }
       continue
     }
 

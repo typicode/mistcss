@@ -38,7 +38,7 @@ export function ${name}({ ${[
     <${[
       component.tag,
       '{...props}',
-      `className="${name}"`,
+      `className="${component?.className ?? name}"`,
       ...Object.keys(component.data).map((key) => `data-${key}={${key}}`),
     ].join(' ')}>
       {children}
