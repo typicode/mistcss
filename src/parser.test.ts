@@ -26,6 +26,7 @@ void test('parseInput', () => {
   const actual: Components = parseInput(input)
   const expected: Components = {
     Foo: {
+      className: 'foo',
       tag: 'div',
       data: {
         fooSize: ['lg', 'sm'],
@@ -33,6 +34,7 @@ void test('parseInput', () => {
       },
     },
     Bar: {
+        className: 'bar',
       tag: 'span',
       data: {
         barSize: ['lg'],
@@ -40,6 +42,7 @@ void test('parseInput', () => {
       },
     },
     Baz: {
+        className: 'baz',
       tag: 'p',
       data: {},
     },
