@@ -34,7 +34,7 @@ void test('parseInput', () => {
       },
     },
     Bar: {
-        className: 'bar',
+      className: 'bar',
       tag: 'span',
       data: {
         barSize: ['lg'],
@@ -42,7 +42,7 @@ void test('parseInput', () => {
       },
     },
     Baz: {
-        className: 'baz',
+      className: 'baz',
       tag: 'p',
       data: {},
     },
