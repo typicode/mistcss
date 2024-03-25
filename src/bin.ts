@@ -12,6 +12,24 @@ import {
   safeCreateFile,
 } from './writer.js'
 
+function handleMistFileUpdate(cwd: string, filename: string) {
+  safeCreateFile(path.join(cwd, filename))
+}
+
+function handleMistFileDelete(cwd: string, filename: string) {
+  const genFilename = mistToGenFilename(filename)
+  if (fs.existsSync(path.join(cwd, genFilename))) {
+    fs.unlinkSync(path.join(cwd, genFilename))
+  }
+}
+
+function handleGenFileWithoutMistFile(cwd: string, filename: string) {
+  const mistFilename = genToMistFilename(filename)
+  if (!fs.existsSync(path.join(cwd, mistFilename))) {
+    fs.unlinkSync(path.join(cwd, filename))
+  }
+}
+
 const { values, positionals } = parseArgs({
   options: {
     watch: {
@@ -44,35 +62,19 @@ if (fs.statSync(fileOrDir).isFile()) {
   const mistFiles = await globby(mistGlob, { cwd })
   const genFiles = await globby(genGlob, { cwd })
 
-  function handleMistFileUpdate(filename: string) {
-    safeCreateFile(path.join(cwd, filename))
-  }
-
-  function handleMistFileDelete(filename: string) {
-    const genFilename = mistToGenFilename(filename)
-    if (fs.existsSync(path.join(cwd, genFilename))) {
-      fs.unlinkSync(path.join(cwd, genFilename))
-    }
-  }
-
-  function handleGenFileWithoutMistFile(filename: string) {
-    const mistFilename = genToMistFilename(filename)
-    if (!fs.existsSync(path.join(cwd, mistFilename))) {
-      fs.unlinkSync(path.join(cwd, filename))
-    }
-  }
-
   // Watch files
   if (values.watch) {
     chokidar
       .watch(mistGlob, { cwd })
-      .on('change', handleMistFileUpdate)
-      .on('unlink', handleMistFileDelete)
+      .on('change', (filename) => handleMistFileUpdate(cwd, filename))
+      .on('unlink', (filename) => handleMistFileDelete(cwd, filename))
   }
 
   // Re-generate all files
-  mistFiles.forEach(handleMistFileUpdate)
+  mistFiles.forEach((filename) => handleMistFileUpdate(cwd, filename))
 
   // Clean up generated files without a corresponding mist file
-  genFiles.forEach((genFilename) => handleGenFileWithoutMistFile(genFilename))
+  genFiles.forEach((genFilename) =>
+    handleGenFileWithoutMistFile(cwd, genFilename),
+  )
 }

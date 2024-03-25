@@ -1,6 +1,7 @@
 import assert from 'node:assert'
 import fs from 'node:fs'
 import test from 'node:test'
+
 import { Components, parseInput } from './parser.js'
 import { render } from './renderer.js'
 
