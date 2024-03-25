@@ -6,7 +6,7 @@ export type Components = Record<string, Component>
 export interface Component {
   tag: string
   data: Record<string, string[] | boolean>
-  className?: string
+  className: string
 }
 
 const enumDataAttributeRegex =
