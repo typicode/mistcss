@@ -3,7 +3,7 @@ import { compile, Element } from 'stylis'
 // Components in a MistCSS file
 export type Components = Record<string, Component>
 
-export type Component = {
+export interface Component {
   tag: string
   data: Record<string, string[] | boolean>
   className?: string
@@ -16,7 +16,7 @@ const booleanDataAttributeRegex = /\[data-(?<attribute>[a-z-]+)(?=\])/g
 const pascalCaseRegex = /(?:^|-)([a-z])/g
 
 export function pascalCase(str: string): string {
-  return str.replace(pascalCaseRegex, (_, g) => g.toUpperCase())
+  return str.replace(pascalCaseRegex, (_, g: string) => g.toUpperCase())
 }
 
 const camelCaseRegex = /-([a-z])/g

@@ -1,4 +1,4 @@
-import { Components, Component } from './parser.js'
+import { Component,Components } from './parser.js'
 
 function renderProps(component: Component): string {
   return Object.entries({
