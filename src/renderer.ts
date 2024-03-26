@@ -1,4 +1,4 @@
-import { Components, Component } from './parser.js'
+import { Component, Components } from './parser.js'
 
 function renderProps(component: Component): string {
   return Object.entries({
@@ -38,7 +38,7 @@ export function ${name}({ ${[
     <${[
       component.tag,
       '{...props}',
-      `className="${component?.className ?? name}"`,
+      `className="${component.className}"`,
       ...Object.keys(component.data).map((key) => `data-${key}={${key}}`),
     ].join(' ')}>
       {children}

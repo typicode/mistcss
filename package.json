@@ -1,6 +1,6 @@
 {
   "name": "mistcss",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "",
   "type": "module",
   "bin": {
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "rm -rf lib && tsc",
     "format": "prettier --write .",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "fixtures:type-check": " tsc -p ./fixtures/tsconfig.json",
     "fixtures:lint-css": "stylelint './fixtures/**/*.css'",
     "test": "npm run build && node --test && npm run fixtures:type-check && npm run fixtures:lint-css",

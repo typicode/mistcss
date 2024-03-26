@@ -1,28 +1,28 @@
 import assert from 'node:assert'
 import fs from 'node:fs'
-import test from 'node:test'
 import os from 'node:os'
+import path from 'node:path'
+import test from 'node:test'
 
 import {
   genToMistFilename,
   mistToGenFilename,
   safeCreateFile,
 } from './writer.js'
-import path from 'node:path'
 
-test('genToMistFilename', () => {
+void test('genToMistFilename', () => {
   const actual = genToMistFilename('Foo.mist.tsx')
   const expected = 'Foo.mist.css'
   assert.strictEqual(actual, expected)
 })
 
-test('mistToGenFilename', () => {
+void test('mistToGenFilename', () => {
   const actual = mistToGenFilename('Foo.mist.css')
   const expected = 'Foo.mist.tsx'
   assert.strictEqual(actual, expected)
 })
 
-test('safeCreateFile', () => {
+void test('safeCreateFile', () => {
   const dir = os.tmpdir()
   const mistCSS = path.join(dir, 'Foo.mist.css')
   const mistTSX = path.join(dir, 'Foo.mist.tsx')

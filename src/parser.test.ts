@@ -2,19 +2,19 @@ import assert from 'node:assert'
 import fs from 'node:fs'
 import test from 'node:test'
 
-import { type Components, parseInput, camelCase, pascalCase } from './parser.js'
+import { camelCase, type Components, parseInput, pascalCase } from './parser.js'
 
 // Fixtures
 const mistCSS: string = fs.readFileSync('fixtures/Foo.mist.css', 'utf-8')
 
-test('toCamelCase', () => {
+void test('toCamelCase', () => {
   const arr = ['foo', 'foo-bar', 'f', 'f-b']
   const actual = arr.map(camelCase)
   const expected = ['foo', 'fooBar', 'f', 'fB']
   assert.deepStrictEqual(actual, expected)
 })
 
-test('toPascalCase', () => {
+void test('toPascalCase', () => {
   const arr = ['foo', 'foo-bar', 'f', 'f-b']
   const actual = arr.map(pascalCase)
   const expected = ['Foo', 'FooBar', 'F', 'FB']
@@ -34,7 +34,7 @@ void test('parseInput', () => {
       },
     },
     Bar: {
-        className: 'bar',
+      className: 'bar',
       tag: 'span',
       data: {
         barSize: ['lg'],
@@ -42,7 +42,7 @@ void test('parseInput', () => {
       },
     },
     Baz: {
-        className: 'baz',
+      className: 'baz',
       tag: 'p',
       data: {},
     },
