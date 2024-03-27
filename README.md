@@ -47,4 +47,4 @@ https://typicode.github.io/mistcss
 
 ## Why the name?
 
-C in CSS stands for cascade 🌊 → atomized water forms mist 🌫️ → MistCSS creates pure CSS atomic components 🌬️
+_C_ in CSS stands for _Cascading_ 🌊 → atomized water forms mist 🌫️ → MistCSS creates pure CSS atomic components 🌬️
