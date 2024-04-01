@@ -78,6 +78,28 @@ Let's create a classic `Button` component accepting two props:
   }
 }
 ```
+```css [CSS + Tailwind V4]
+@scope (.button) {
+  button:scope {
+    /* Default style */
+    font-size: theme(fontSize.base);
+    border-radius: theme(borderRadius.sm);
+
+    &[data-size='lg'] {
+      font-size: theme(fontSize.lg);
+    }
+
+    &[data-size='sm'] {
+      font-size: theme(fontSize.sm);
+    }
+
+    &[data-danger] {
+      background-color: theme(colors.red.700);
+      color: theme(colors.white);
+    }
+  }
+}
+```
 
 :::
 
