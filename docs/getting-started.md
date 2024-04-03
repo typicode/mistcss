@@ -82,15 +82,15 @@ Let's create a classic `Button` component accepting two props:
 @scope (.button) {
   button:scope {
     /* Default style */
-    font-size: var(--fontSize-base);
-    border-radius: var(--borderRadius-sm);
+    font-size: var(--font-size-base);
+    border-radius: var(--radius-sm);
 
     &[data-size='lg'] {
-      font-size: var(--fontSize-lg);
+      font-size: var(--font-size-lg);
     }
 
     &[data-size='sm'] {
-      font-size: var(--fontSize-sm);
+      font-size: var(--font-size-sm);
     }
 
     &[data-danger] {
