@@ -10,7 +10,7 @@ export interface Component {
 }
 
 const enumDataAttributeRegex =
-  /\[data-(?<attribute>[a-z-]+)='(?<value>[^']*)'\]/g
+  /\[data-(?<attribute>[a-z-]+)=('|")(?<value>[^']*)('|")\]/g
 const booleanDataAttributeRegex = /\[data-(?<attribute>[a-z-]+)(?=\])/g
 
 const pascalCaseRegex = /(?:^|-)([a-z])/g
