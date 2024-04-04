@@ -7,7 +7,7 @@
     "mistcss": "lib/bin.js"
   },
   "scripts": {
-    "build": "rm -rf lib && tsc && chmod 777 ./lib/bin.js && node ./lib/bin.js ./fixtures",
+    "build": "rm -rf lib && tsc",
     "format": "prettier --write .",
     "lint": "eslint",
     "fixtures:type-check": " tsc -p ./fixtures/tsconfig.json",
