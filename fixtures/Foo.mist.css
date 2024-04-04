@@ -1,5 +1,10 @@
 @scope (.foo) {
   div:scope {
+    --background: var(--color-black);
+    --padding: var(--spacing-0);
+    --border: 1;
+    --test: true;
+
     font-size: 1rem;
 
     &[data-foo-size='lg'] {

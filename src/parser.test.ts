@@ -2,7 +2,7 @@ import assert from 'node:assert'
 import fs from 'node:fs'
 import test from 'node:test'
 
-import { camelCase, type Components, parseInput, pascalCase } from './parser.js'
+import {camelCase, type Components, parseInput, pascalCase} from './parser.js'
 
 // Fixtures
 const mistCSS: string = fs.readFileSync('fixtures/Foo.mist.css', 'utf-8')
@@ -22,13 +22,16 @@ void test('toPascalCase', () => {
 })
 
 void test('parseInput', () => {
-  const input: string = mistCSS
-  const actual: Components = parseInput(input)
+  const actual: Components = parseInput(mistCSS)
   const expected: Components = {
     Foo: {
       className: 'foo',
       tag: 'div',
       data: {
+        '--background': 'string:--color',
+        '--border': 'string',
+        '--padding': 'string:--spacing',
+        '--test': 'string',
         fooSize: ['lg', 'sm'],
         x: true,
       },

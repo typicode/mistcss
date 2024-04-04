@@ -5,7 +5,7 @@ export type Components = Record<string, Component>
 
 export interface Component {
   tag: string
-  data: Record<string, string[] | boolean>
+  data: Record<string, string | string[] | boolean>
   className: string
 }
 
@@ -26,10 +26,15 @@ export function camelCase(str: string): string {
 }
 
 // Visit all nodes in the AST and return @scope and rule nodes
-function visit(nodes: Element[]): { type: string; props: string[] }[] {
-  let result: { type: string; props: string[] }[] = []
+function visit(nodes: Element[]): { type: string; props: string[], value?: string }[] {
+  let result: { type: string; props: string[], value?: string }[] = []
 
   for (const node of nodes) {
+    if (node.type === 'decl' && node.value.startsWith('--')) {
+      result.push({ type: node.type, props: Array.isArray(node.props) ? node.props : [node.props], value: node.value })
+      continue
+    }
+
     if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
       result.push({ type: node.type, props: node.props })
     }
@@ -58,6 +63,29 @@ export function parseInput(input: string): Components {
       className = prop.replace('(.', '').replace(')', '')
       name = pascalCase(className)
       components[name] = { tag: '', data: {}, className }
+      continue
+    }
+
+    if (node.type === 'decl') {
+      const prop = node.props[0]
+      const prefix = node.value?.split(':var(')[1]?.replace(');', '')
+
+      if (prop === undefined || name === undefined) {
+        continue
+      }
+
+      const component = components[name]
+
+      if (component === undefined) {
+        continue
+      }
+
+      component.data[prop] ||= "string"
+
+      if (prefix) {
+        component.data[prop] = `string:${prefix.split(/(?<!-)(?=-[a-zA-Z0-9])/g)[0]}`
+      }
+
       continue
     }
 

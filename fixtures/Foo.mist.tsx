@@ -5,13 +5,28 @@ import type { JSX, ReactNode } from 'react'
 
 type FooProps = {
   children?: ReactNode
+  background?: string
+  padding?: string
+  border?: string
+  test?: string
   fooSize?: 'lg' | 'sm'
   x?: boolean
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ children, fooSize, x, ...props }: FooProps) {
+export function Foo({ children, background, padding, border, test, fooSize, x, ...props }: FooProps) {
   return (
-    <div {...props} className="foo" data-fooSize={fooSize} data-x={x}>
+    <div
+		{...props}
+		className="foo"
+		data-fooSize={fooSize}
+		data-x={x}
+		style={{
+            ["--background" as string]: `${background.includes("var(--") ? `${background}` : `--color-${background}`}`,
+			["--padding" as string]: `${padding.includes("var(--") ? `${padding}` : `--spacing-${padding}`}`,
+			["--border" as string]: `${border}`,
+			["--test" as string]: `${test}`
+        }}
+    >
       {children}
     </div>
   )
@@ -25,7 +40,12 @@ type BarProps = {
 
 export function Bar({ children, barSize, x, ...props }: BarProps) {
   return (
-    <span {...props} className="bar" data-barSize={barSize} data-x={x}>
+    <span
+		{...props}
+		className="bar"
+		data-barSize={barSize}
+		data-x={x}
+    >
       {children}
     </span>
   )
@@ -37,7 +57,10 @@ type BazProps = {
 
 export function Baz({ children, ...props }: BazProps) {
   return (
-    <p {...props} className="baz">
+    <p
+		{...props}
+		className="baz"
+    >
       {children}
     </p>
   )

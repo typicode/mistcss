@@ -6,15 +6,15 @@ function renderProps(component: Component): string {
     ...component.data,
   })
     .map(([key, value]) => {
-      if (key === 'children') {
-        return `${key}?: ${value}`
-      }
+        if (Array.isArray(value)) {
+            return `${key}?: ${value.map((v) => `'${v}'`).join(' | ')}`
+        }
 
-      if (Array.isArray(value)) {
-        return `${key}?: ${value.map((v) => `'${v}'`).join(' | ')}`
-      }
+        if (typeof value === "string") {
+            return `${key.startsWith('--') ? key.replace('--', '') : key}?: ${value.split(':')[0]}`
+        }
 
-      return `${key}?: boolean`
+        return `${key}?: boolean`
     })
     .map((line) => `  ${line}`)
     .join('\n')
@@ -25,13 +25,17 @@ function renderComponent(components: Components, name: string): string {
   if (component === undefined) {
     return ''
   }
+
+  const variables = Object.keys(component.data).filter(key => key.startsWith('--'));
+  const hasVariables = variables.length > 0;
+
   return `type ${name}Props = {
 ${renderProps(component)}
 } & JSX.IntrinsicElements['${component.tag}']
 
 export function ${name}({ ${[
     'children',
-    ...Object.keys(component.data),
+    ...Object.keys(component.data).map(key => key.startsWith('--') ? key.replace('--', '') : key),
     '...props',
   ].join(', ')} }: ${name}Props) {
   return (
@@ -39,8 +43,16 @@ export function ${name}({ ${[
       component.tag,
       '{...props}',
       `className="${component.className}"`,
-      ...Object.keys(component.data).map((key) => `data-${key}={${key}}`),
-    ].join(' ')}>
+      ...Object.keys(component.data).filter(key => !key.startsWith('--')).map((key) => `data-${key}={${key}}`),
+      hasVariables ? `style={{
+            ${variables.map(key => 
+          (component.data[key] as string)?.includes(':') ? 
+              `["${key}" as string]: \`\${${key.replace('--', '')}.includes("var(--") ? \`\${${key.replace('--', '')}}\` : \`${(component.data[key] as string).split(':')[1]}-\${${key.replace('--', '')}}\`}\`` 
+              : `["${key}" as string]: \`\${${key.replace('--', '')}}\``)
+          .join(',\r\n\t\t\t')}
+        }}` : null,
+    ].filter(item => item !== null).join("\r\n\t\t")}
+    >
       {children}
     </${component.tag}>
   )
