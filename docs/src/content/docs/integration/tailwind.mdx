@@ -1,0 +1,36 @@
+---
+title: TailwindCSS
+---
+
+If TailwindCSS is already enabled in your project, you have nothing else to do. Otherwise please refer to your framework documentation.
+
+## Tailwind v3
+
+```css title="Button.mist.css"
+@scope (button.button) {
+  :scope {
+    @apply bg-black text-white;
+
+    &[data-variant="primary"] {
+      @apply bg-blue-700;
+    }
+  }
+}
+```
+
+## Tailwind v4
+
+In v4, Tailwind provides CSS variables that can be used in your CSS.
+
+```css title="Button.mist.css"
+@scope (button.button) {
+  :scope {
+    background-color: var(--colors-black);
+    color: var(--colors-white);
+
+    &[data-variant="primary"] {
+      background-color: var(--colors-blue-700);
+    }
+  }
+}
+```

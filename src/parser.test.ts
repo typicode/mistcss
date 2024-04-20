@@ -1,51 +1,38 @@
-import assert from 'node:assert'
-import fs from 'node:fs'
+import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { camelCase, type Components, parseInput, pascalCase } from './parser.js'
+import { parse } from './parser.js'
 
-// Fixtures
-const mistCSS: string = fs.readFileSync('fixtures/Foo.mist.css', 'utf-8')
+void test('parse', () => {
+  const css = `
+    @scope (div.foo) {
+      :scope {
+        --foo: green;
 
-void test('toCamelCase', () => {
-  const arr = ['foo', 'foo-bar', 'f', 'f-b']
-  const actual = arr.map(camelCase)
-  const expected = ['foo', 'fooBar', 'f', 'fB']
-  assert.deepStrictEqual(actual, expected)
-})
+        &[data-x] {
+          --bar: green;
+        }
 
-void test('toPascalCase', () => {
-  const arr = ['foo', 'foo-bar', 'f', 'f-b']
-  const actual = arr.map(pascalCase)
-  const expected = ['Foo', 'FooBar', 'F', 'FB']
-  assert.deepStrictEqual(actual, expected)
-})
+        &[data-foo='one'] {
+          --baz: green;
+        }
 
-void test('parseInput', () => {
-  const input: string = mistCSS
-  const actual: Components = parseInput(input)
-  const expected: Components = {
-    Foo: {
-      className: 'foo',
+        &[data-foo="two"] {
+          --qux: green;
+        }
+      }
+    }
+  `
+
+  const actual = parse(css)
+  const expected = [
+    {
       tag: 'div',
-      data: {
-        fooSize: ['lg', 'sm'],
-        x: true,
-      },
+      className: 'foo',
+      attributes: { 'data-foo': new Set(['one', 'two']) },
+      booleanAttributes: new Set(['data-x']),
+      properties: new Set(['--foo', '--bar', '--baz', '--qux']),
     },
-    Bar: {
-      className: 'bar',
-      tag: 'span',
-      data: {
-        barSize: ['lg'],
-        x: true,
-      },
-    },
-    Baz: {
-      className: 'baz',
-      tag: 'p',
-      data: {},
-    },
-  }
-  assert.deepStrictEqual(actual, expected)
+  ]
+  assert.deepEqual(actual, expected)
 })

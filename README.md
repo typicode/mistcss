@@ -8,43 +8,45 @@ MistCSS is a new, better and faster way to write visual components. ~~CSS-in-JS~
 
 View the [site](https://typicode.github.io/mistcss) to learn more.
 
-Supports Next.js, Remix and TailwindCSS. More to come.
+It supports:
+- [Next.js](https://nextjs.org/)
+- [Remix](https://remix.run/)
+- [React](https://react.dev/)
+- [Hono](https://hono.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
-`Paragraph.mist.css`
+## Write your component in CSS only
 
-```css
-@scope (.paragraph) {
-  p:scope {
-    color: black;
+```css title="Button.mist.css"
+@scope (button.custom-button) {
+  :scope {
+    background: black;
+    color: white;
 
-    &[data-error] {
-      color: red;
+    &[data-variant="primary"] {
+      background: blue;
+    }
+
+    &[data-variant="secondary"] {
+      background: gray;
     }
   }
 }
 ```
 
-`App.jsx`
+## Get a type-safe component without writing TypeScript
 
-```jsx
-import { Paragraph } from 'Paragraph.mist'
+```jsx title="App.tsx"
+import { CustomButton } from './Button.mist'
 
-export default const App = () => (
-  <main>
-    <Paragraph>I'm a React component written in CSS only</Paragraph>
-    <Paragraph error>props can be passed</Paragraph>
-
-    {/* 💥 TypeScript will catch errors */}
-    <Paragraph eror>typo</Paragraph>
-    <Paragraph type="button">invalid prop</Paragraph>
-  </main>
+export const App = () => (
+  <CustomButton variant="primary">Save</CustomButton>
 )
 ```
+
+Read [docs](/intro) →
+</div>
 
 ## Documentation
 
 https://typicode.github.io/mistcss
-
-## Why the name?
-
-C in CSS stands for cascade 🌊 → atomized water forms mist 🌫️ → MistCSS creates pure CSS atomic components 🌬️
