@@ -6,15 +6,6 @@
 
 MistCSS is a new, better and faster way to write visual components. ~~CSS-in-JS~~? Nope! JS-from-CSS 👍
 
-View the [site](https://typicode.github.io/mistcss) to learn more.
-
-It supports:
-- [Next.js](https://nextjs.org/)
-- [Remix](https://remix.run/)
-- [React](https://react.dev/)
-- [Hono](https://hono.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-
 ## Write your component in CSS only
 
 ```css title="Button.mist.css"
@@ -44,9 +35,14 @@ export const App = () => (
 )
 ```
 
-Read [docs](/intro) →
-</div>
-
 ## Documentation
 
 https://typicode.github.io/mistcss
+
+## Supports
+
+- [Next.js](https://nextjs.org/)
+- [Remix](https://remix.run/)
+- [React](https://react.dev/)
+- [Hono](https://hono.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
