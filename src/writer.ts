@@ -1,35 +1,25 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-import { parseInput } from './parser.js'
-import { render } from './renderer.js'
+import { parse } from './parser.js'
+import { render } from './renderers/react.js'
 
-export function genToMistFilename(genFilename: string) {
-  return genFilename.replace(/\.tsx$/, '.css')
-}
-
-export function mistToGenFilename(mistFilename: string) {
-  return mistFilename.replace(/\.css$/, '.tsx')
-}
-
-function createFile(filename: string) {
-  let data = fs.readFileSync(filename, 'utf8')
-  const parsedInput = parseInput(data)
-
-  const name = path.basename(filename, '.mist.css')
-  data = render(name, parsedInput)
-
-  fs.writeFileSync(filename.replace('.css', '.tsx'), data)
-}
-
-export function safeCreateFile(mistFilename: string) {
+// Create a file from a mist file
+export function createFile(mist: string, hono?: boolean) {
   try {
-    createFile(mistFilename)
+    const data = parse(fs.readFileSync(mist, 'utf8'))
+    const name = path.basename(mist, '.mist.css')
+    if (data[0]) {
+      fs.writeFileSync(
+        mist.replace(/\.css$/, '.tsx'),
+        render(name, data[0], hono),
+      )
+    }
   } catch (e) {
     if (e instanceof Error) {
-      console.error(`Error ${mistFilename}: ${e.message}`)
+      console.error(`Error ${mist}: ${e.message}`)
     } else {
-      console.error(`Error ${mistFilename}`)
+      console.error(`Error ${mist}`)
       console.error(e)
     }
   }

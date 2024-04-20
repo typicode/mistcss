@@ -1,0 +1,146 @@
+---
+title: Writing Components
+---
+
+## Overwiew
+
+Here's the basic structure of a MistCSS component. See below for details.
+
+```css title="Button.mist.css" copy
+/* Tag and component name */
+@scope (button.custom-button) {
+  :scope {
+    /* CSS variables */
+    --x: ...;
+    --y: ...;
+
+    /* Default styles */
+    margin: ...;
+    padding: ...;
+
+    /* Enum props */
+    &[data-foo="..."] { ... }
+    &[data-bar="..."] { ... }
+
+    /* Boolean props */
+    &[data-is-foo] { ... }
+  }
+}
+```
+
+MistCSS will look for `[data-*]` and `--variables`. However, it makes no assumption how you use them as selectors.
+
+For example, this is valid:
+
+```css
+/* This style will be applied when foo === "x" && bar === "y" */
+&[data-foo="x"]&[data-bar="y"] {
+  /* ... */
+}
+```
+
+
+
+## Tag and component name
+
+To define the tag and name of your component, use `@scope (<tag>.<component-name>)`
+
+```css title="Button.mist.css" copy
+@scope (button.custom-button) {
+  :scope {
+    background: black;
+    color: white;
+  }
+}
+```
+
+```jsx
+<CustomButton>Save</CustomButton>
+```
+
+```jsx
+// TypeScript will catch incorrect attributes
+// A button tag can"t accept src attribute
+<CustomButton src="https://example.com/image.png">Save</CustomButton>
+```
+
+## Enum props
+
+To add enum props to your component, use `data-<prop-name>=<value>`
+
+```css title="Button.mist.css" copy
+@scope (button.custom-button) {
+  :scope {
+    /* Default style */
+    font-size: 1rem;
+
+    /* size: "small" | "large" */
+    &[data-size="small"] {
+      font-size: 0.5rem;
+      padding: 0.5rem;
+    }
+
+    &[data-size="large"] {
+      font-size: 2rem;
+      padding: 2rem;
+    }
+  }
+}
+```
+
+```jsx
+<CustomButton>Save</CustomButton>
+<CustomButton size="small">Save</CustomButton>
+<CustomButton size="large">Save</CustomButton>
+```
+
+```jsx
+// TypeScript will catch incorrect value
+// extra-large doesn"t exist
+<CustomButton size="extra-large">Save</CustomButton>
+```
+
+## Boolean props
+
+To add boolean props to your component, use `data-<prop>`
+
+```css title="Button.mist.css" copy
+@scope (button.custom-button) {
+  :scope {
+    /* danger: boolean */
+    &[data-danger] {
+      background: red;
+      color: white;
+    }
+  }
+}
+```
+
+```jsx
+<CustomButton danger={true}>Delete</CustomButton>
+```
+
+```jsx
+// TypeScript will catch incorrect value
+// danger only accepts boolean
+<CustomButton danger={10}>Delete</CustomButton>
+```
+
+## Variable props
+
+To add variable props, use `--<prop-name>: <default-value>`
+
+```css title="Button.mist.css" copy
+@scope (button.custom-button) {
+  :scope {
+    /* backgroundColor: string */
+    --background-color: black;
+
+    background: var(--background-color);
+  }
+}
+```
+
+```jsx
+<CustomButton backgroundColor="azure">Sign Up</CustomButton>
+```

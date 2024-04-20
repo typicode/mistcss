@@ -1,118 +1,104 @@
-import { compile, Element } from 'stylis'
+import {
+  compile,
+  DECLARATION,
+  Element,
+  Middleware,
+  middleware,
+  RULESET,
+  serialize,
+} from 'stylis'
 
-// Components in a MistCSS file
-export type Components = Record<string, Component>
-
-export interface Component {
-  tag: string
-  data: Record<string, string[] | boolean>
-  className: string
+export interface Data {
+  className: string // foo
+  tag: string // div
+  attributes: Record<string, Set<string>> // data-foo: ['bar', 'baz']
+  booleanAttributes: Set<string> // data-foo, data-bar
+  properties: Set<string> // --foo, --bar
 }
 
-const enumDataAttributeRegex =
-  /\[data-(?<attribute>[a-z-]+)='(?<value>[^']*)'\]/g
-const booleanDataAttributeRegex = /\[data-(?<attribute>[a-z-]+)(?=\])/g
-
-const pascalCaseRegex = /(?:^|-)([a-z])/g
-
-export function pascalCase(str: string): string {
-  return str.replace(pascalCaseRegex, (_, g: string) => g.toUpperCase())
+// (div.foo) -> { tag: 'div', className: 'foo' }
+function parseScopeSelector(str: string): { tag: string; className: string } {
+  const [tag = '', className = ''] = str.slice(1, -1).split('.')
+  return { tag, className }
 }
 
-const camelCaseRegex = /-([a-z])/g
-
-export function camelCase(str: string): string {
-  return str.replace(camelCaseRegex, (g) => g[1]?.toUpperCase() ?? '')
+// :scope[data-foo="bar"] -> true
+// :scope[data-foo] -> true
+export function isAttribute(str: string): boolean {
+  return str.startsWith(':scope[data-')
 }
 
-// Visit all nodes in the AST and return @scope and rule nodes
-function visit(nodes: Element[]): { type: string; props: string[] }[] {
-  let result: { type: string; props: string[] }[] = []
+// :scope[data-foo="bar"] -> { attribute: 'data-foo',  value: 'bar' }
+// :scope[data-foo] -> { attribute: 'data-foo',  value: '' }
+function parseAttribute(str: string): { attribute: string; value?: string } {
+  const [attribute = '', value] = str.slice(7, -1).split('=')
+  return { attribute, value: value?.slice(1, -1) }
+}
 
-  for (const node of nodes) {
-    if (['@scope', 'rule'].includes(node.type) && Array.isArray(node.props)) {
-      result.push({ type: node.type, props: node.props })
+function update(data: Data): Middleware {
+  return function (element, _index, _children, callback) {
+    switch (element.type) {
+      case DECLARATION:
+        // Custom properties
+        if ((element.props as string).startsWith('--')) {
+          data.properties.add(element.props as string)
+        }
+        break
+
+      case RULESET:
+        ;(element.props as string[])
+          .filter(isAttribute)
+          .map(parseAttribute)
+          .forEach(({ attribute, value }) => {
+            if (value === undefined) {
+              data.booleanAttributes.add(attribute)
+            } else {
+              const set = (data.attributes[attribute] ??= new Set())
+              set.add(value)
+            }
+          })
+        break
     }
 
-    if (Array.isArray(node.children)) {
-      result = result.concat(visit(node.children))
-    }
+    Array.isArray(element.children) && serialize(element.children, callback)
   }
-
-  return result
 }
 
-export function parseInput(input: string): Components {
-  const components: Components = {}
+export function parse(css: string): Data[] {
+  const parsed: Data[] = []
 
-  let name
-  let className
-  const nodes = visit(compile(input))
-  for (const node of nodes) {
-    // Parse name
-    if (node.type === '@scope') {
-      const prop = node.props[0]
-      if (prop === undefined) {
-        throw new Error('Invalid MistCSS file, no class found in @scope')
-      }
-      className = prop.replace('(.', '').replace(')', '')
-      name = pascalCase(className)
-      components[name] = { tag: '', data: {}, className }
-      continue
-    }
+  serialize(
+    compile(css),
+    middleware([
+      (element) => {
+        // Seach for @scope
+        switch (element.type) {
+          case '@scope': {
+            const prop = element.props[0] // (.foo)
+            if (prop === undefined) return // Not supported
+            const { tag, className } = parseScopeSelector(prop)
 
-    // Parse tag and data attributes
-    if (node.type === 'rule') {
-      const prop = node.props[0]
-      if (prop === undefined || name === undefined) {
-        continue
-      }
-      const component = components[name]
-      if (component === undefined) {
-        continue
-      }
+            const data: Data = {
+              tag,
+              className,
+              attributes: {},
+              booleanAttributes: new Set<string>(),
+              properties: new Set<string>(),
+            }
+            parsed.push(data)
 
-      // Parse tag
-      if (prop.endsWith(':scope')) {
-        component.tag = prop.replace(':scope', '')
-        continue
-      }
-
-      // Parse enum data attributes
-      const enumMatches = prop.matchAll(enumDataAttributeRegex)
-      for (const match of enumMatches) {
-        const attribute = match.groups?.['attribute']
-        const value = match.groups?.['value'] ?? ''
-
-        if (attribute === undefined) {
-          continue
+            // Extract data-attributes and custom properties
+            serialize(
+              // Loop through @scope children
+              // Note: nested rules are children of @scope, not :scope
+              element.children as Element[],
+              middleware([update(data)]),
+            )
+          }
         }
+      },
+    ]),
+  )
 
-        // Convert to camelCase
-        const camelCasedAttribute = camelCase(attribute)
-
-        // Initialize data if it doesn't exist
-        component.data[camelCasedAttribute] ||= []
-        const attr = component.data[camelCasedAttribute]
-        if (Array.isArray(attr) && !attr.includes(value)) {
-          attr.push(value)
-        }
-        continue
-      }
-
-      // Parse boolean data attributes
-      const booleanMatches = prop.matchAll(booleanDataAttributeRegex)
-      for (const match of booleanMatches) {
-        const attribute = match.groups?.['attribute']
-        if (attribute === undefined) {
-          continue
-        }
-
-        component.data[attribute] ||= true
-        continue
-      }
-    }
-  }
-
-  return components
+  return parsed
 }

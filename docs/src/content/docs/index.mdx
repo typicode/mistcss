@@ -1,0 +1,50 @@
+---
+title: MistCSS
+description: Write components using CSS... Only!
+template: splash
+hero:
+  tagline: A new, better and faster way to write visual components.
+    <br/><strike>CSS-in-JS?</strike> Nope! <strong>JS-from-CSS</strong> 💖
+  actions:
+    - text: Get Started
+      link: mistcss/intro
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/typicode/mistcss
+      icon: external
+---
+
+<div style="max-width: 40rem; margin: auto">
+
+### Write your component in CSS only
+
+```css title="Button.mist.css"
+@scope (button.custom-button) {
+  :scope {
+    background: black;
+    color: white;
+
+    &[data-variant="primary"] {
+      background: blue;
+    }
+
+    &[data-variant="secondary"] {
+      background: gray;
+    }
+  }
+}
+```
+
+### Get a type-safe component<br/>Without writing TypeScript
+
+```jsx title="App.tsx"
+import { CustomButton } from './Button.mist'
+
+export const App = () => (
+  <CustomButton variant="primary">Save</CustomButton>
+)
+```
+
+Read [docs](/intro) →
+</div>

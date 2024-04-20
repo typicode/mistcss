@@ -1,0 +1,22 @@
+---
+title: Installation
+---
+
+```sh
+npm install --save-dev mistcss
+```
+
+Assuming your components are in `./components`:
+
+```json title="package.json" copy
+{
+  "scripts": {
+    "mistcss:dev": "mistcss ./components --watch",
+    "mistcss:build": "mistcss ./components"
+  }
+}
+```
+
+You may want to use [concurrently](https://github.com/open-cli-tools/concurrently) to run `mistcss:dev` in parallel with your dev server.
+
+When building, `mistcss:build` must be run first.
