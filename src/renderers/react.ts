@@ -69,7 +69,7 @@ function renderTagStyle(data: Data, indent: string): string {
 function renderFunctionArgs(data: Data, children?: boolean): string {
   const args = children ? ['children'] : [];
   return [
-    ...args
+    ...args,
     ...Object.keys(data.attributes).map(attributeToCamelCase),
     ...Array.from(data.booleanAttributes).map(attributeToCamelCase),
     ...Array.from(data.properties).map(propertyToCamelCase),
