@@ -80,7 +80,7 @@ type Props = {
   isFoo?: boolean
   propFoo?: string
   propBar?: string
-} & JSX.IntrinsicElements['div']
+} & JSX.IntrinsicElements['hr']
 
 export function Foo({ attr, attrFooBar, isFoo, propFoo, propBar, ...props }: Props) {
   return (
