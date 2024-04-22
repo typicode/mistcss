@@ -15,4 +15,6 @@ const noChildrenTags = new Set([
     'wbr',
     ])
 
-export const canTagHaveChildren(tag: string): boolean => !noChildrenTags.has(tag);
+export function canTagHaveChildren(tag: string): boolean {
+    return !noChildrenTags.has(tag);
+}
