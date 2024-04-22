@@ -7,13 +7,13 @@ export default defineConfig({
   base: 'mistcss',
   integrations: [
     starlight({
-      title: 'MistCSS',
-      logo: { src: './src/assets/emoji_u1f32c.svg' },
+      title: '💧 MistCSS',
       customCss: [
         // Relative path to your custom CSS file
         './src/styles/custom.css',
       ],
       social: {
+        twitter: 'https://twitter.com/typicode',
         github: 'https://github.com/typicode/mistcss',
       },
       sidebar: [
