@@ -82,7 +82,7 @@ type Props = {
   propBar?: string
 } & JSX.IntrinsicElements['div']
 
-export function Foo({ attr, attrFooBar, isFoo, propFoo, propBar, ...props }: PropsWithChildren<Props>) {
+export function Foo({ attr, attrFooBar, isFoo, propFoo, propBar, ...props }: Props) {
   return (
     <hr
       {...props}
