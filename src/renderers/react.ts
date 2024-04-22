@@ -77,7 +77,7 @@ function renderFunctionArgs(data: Data, children?: boolean): string {
   ].join(', ')
 }
 
-type RenderFunctionOptionsType = {
+type OptionTypes = {
   hono?: boolean;
   children?: boolean;
 }
@@ -85,7 +85,7 @@ type RenderFunctionOptionsType = {
 function renderFunction(data: Data, {
   hono,
   children
-}: RenderFunctionOptionsType): string {
+}: OptionTypes): string {
   return `export function ${pascalCase(data.className)}({ ${renderFunctionArgs(data, children)} }: ${children ? `PropsWithChildren<Props>` : `Props`}) {
   return (
     <${data.tag}
@@ -100,7 +100,7 @@ ${renderTagStyle(data, '      ')}
 }`
 }
 
-function renderImports({ hono, children }): string => {
+function renderImports({ hono, children }: OptionTypes): string => {
   if (hono && children)
     return "import type { PropsWithChildren } from 'hono/jsx'";
   if (!hono && children)
