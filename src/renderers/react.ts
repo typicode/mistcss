@@ -100,7 +100,7 @@ ${renderTagStyle(data, '      ')}
 }`
 }
 
-function renderImports({ hono, children }: OptionTypes): string => {
+function renderImports({ hono, children }: OptionTypes): string {
   if (hono && children)
     return "import type { PropsWithChildren } from 'hono/jsx'";
   if (!hono && children)
