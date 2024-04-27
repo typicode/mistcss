@@ -34,3 +34,29 @@ In v4, Tailwind provides CSS variables that can be used in your CSS.
   }
 }
 ```
+
+## Theming using CSS variables
+
+```css title="Button.mist.css"
+@scope (button.button) {
+  :scope {
+    --padding: 0;
+    --color: black;
+
+    padding: var(--padding);
+    color: var(--color);
+  }
+}
+```
+
+````jsx title="App.tsx"
+import theme from 'tailwindcss/defaultTheme'
+
+export const App = () => (
+  <CustomButton
+    padding={theme.spacing.8}
+    color={theme.colors.blue.900}
+  >
+    Save
+  </CustomButton>
+)

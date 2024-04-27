@@ -1,9 +1,8 @@
-import assert from 'node:assert/strict'
-import test from 'node:test'
+import { test, expect } from 'vitest'
 
 import { parse } from './parser.js'
 
-void test('parse', () => {
+ test('parse', () => {
   const css = `
     @scope (div.foo) {
       :scope {
@@ -34,5 +33,5 @@ void test('parse', () => {
       properties: new Set(['--foo', '--bar', '--baz', '--qux']),
     },
   ]
-  assert.deepEqual(actual, expected)
+  expect(actual).toEqual(expected)
 })
