@@ -5,6 +5,8 @@ import {
   Middleware,
   middleware,
   RULESET,
+  // @ts-ignore
+  SCOPE,
   serialize,
 } from 'stylis'
 
@@ -73,7 +75,7 @@ export function parse(css: string): Data[] {
       (element) => {
         // Seach for @scope
         switch (element.type) {
-          case '@scope': {
+          case SCOPE: {
             const prop = element.props[0] // (.foo)
             if (prop === undefined) return // Not supported
             const { tag, className } = parseScopeSelector(prop)

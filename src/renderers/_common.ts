@@ -1,5 +1,5 @@
-import { attributeToCamelCase, propertyToCamelCase } from "../case.js"
-import { Data } from "../parser.js"
+import { attributeToCamelCase, propertyToCamelCase } from './_case.js'
+import { Data } from '../parser.js'
 
 // https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 const voidElements = new Set([
@@ -51,14 +51,56 @@ function mapProperties(properties: Data['properties']): string[] {
   )
 }
 
-export function renderPropsInterface(data: Data) {
-  const lines = [
-    ...mapAttributes(data.attributes),
-    ...mapBooleanAttributes(data.booleanAttributes),
-    ...mapProperties(data.properties),
-  ]
-    .map((l) => `  ${l}`)
-    .join('\n')
+// Example:
+// interface Props { foo?: 'one' | 'two', bar?: boolean, baz?: string } extends JSX.IntrinsicElements['hr']
+export function renderPropsInterface(data: Data, extendedType: string): string {
+  return [
+    `type Props = {`,
+    [
+      ...mapAttributes(data.attributes),
+      ...mapBooleanAttributes(data.booleanAttributes),
+      ...mapProperties(data.properties),
+    ].join(', '),
+    `} & ${extendedType}`,
+  ].join(' ')
+}
 
-  return ['interface Props {', lines, '}'].join('\n')
+// Example:
+// <div {...props} data-foo={dataFoo} data-bar={dataBar} style={{ '--foo': foo, '--bar': bar }} class="foo">{children}</div>
+export function renderTag(data: Data, slotText: string, classText: string): string {
+  return [
+    `<${data.tag}`,
+    '{...props}',
+    Object.keys(data.attributes).length
+      ? Object.keys(data.attributes)
+          .map(
+            (attribute) => `${attribute}={${attributeToCamelCase(attribute)}}`,
+          )
+          .join(' ')
+      : null,
+    data.booleanAttributes.size
+      ? Array.from(data.booleanAttributes)
+          .map(
+            (attribute) => `${attribute}={${attributeToCamelCase(attribute)}}`,
+          )
+          .join(' ')
+      : null,
+    data.properties.size
+      ? [
+          'style={{ ',
+          Array.from(data.properties)
+            .map(
+              (property) => `'${property}': ${propertyToCamelCase(property)}`,
+            )
+            .join(', '),
+          ' }}',
+        ].join('')
+      : null,
+    `${classText}="${data.className}"`,
+    hasChildren(data.tag)
+      ? [`>${slotText}</${data.tag}>`]
+      : '/>',
+  ]
+    .filter((x) => x !== null)
+    .join(' ')
 }

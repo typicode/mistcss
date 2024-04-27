@@ -2,9 +2,9 @@
 title: Frameworks
 ---
 
-## React frameworks
+## React
 
-By default, `mistcss` will generate React components:
+By default, `mistcss` will generate React components that you can use in Next.js or Remix
 
 ```sh
 mistcss ./components
@@ -12,8 +12,12 @@ mistcss ./components
 
 ## Hono
 
-To use it with Hono, pass `--hono` option:
+```sh
+mistcss ./components --target=hono
+```
+
+## Astro
 
 ```sh
-mistcss ./components --hono
+mistcss ./components --target=astro
 ```
