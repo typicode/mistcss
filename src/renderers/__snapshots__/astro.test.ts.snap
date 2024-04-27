@@ -6,7 +6,7 @@ exports[`render > renders Astro component (full) 1`] = `
 import type { HTMLAttributes } from 'astro/types'
 import './component.mist.css'
 
-interface Props extends HTMLAttributes<'div'> { attr?: 'a' | 'b', attrFooBar?: 'foo-bar', isFoo?: boolean, propFoo?: string, propBar?: string }
+type Props = { attr?: 'a' | 'b', attrFooBar?: 'foo-bar', isFoo?: boolean, propFoo?: string, propBar?: string } & HTMLAttributes<'div'>
 
 const { attr, attrFooBar, isFoo, propFoo, propBar, ...props } = Astro.props
 ---
@@ -21,7 +21,7 @@ exports[`render > renders Astro component (minimal) 1`] = `
 import type { HTMLAttributes } from 'astro/types'
 import './component.mist.css'
 
-interface Props extends HTMLAttributes<'div'> {  }
+type Props = {  } & HTMLAttributes<'div'>
 
 const { ...props } = Astro.props
 ---
@@ -36,7 +36,7 @@ exports[`render > renders Astro component (void element) 1`] = `
 import type { HTMLAttributes } from 'astro/types'
 import './component.mist.css'
 
-interface Props extends HTMLAttributes<'hr'> {  }
+type Props = {  } & HTMLAttributes<'hr'>
 
 const { ...props } = Astro.props
 ---
