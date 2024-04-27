@@ -35,6 +35,8 @@ export const App = () => (
 )
 ```
 
+_You can create React, Astro and Hono components. You can also use Tailwind CSS._
+
 ## Documentation
 
 https://typicode.github.io/mistcss
@@ -43,6 +45,6 @@ https://typicode.github.io/mistcss
 
 - [Next.js](https://nextjs.org/)
 - [Remix](https://remix.run/)
-- [React](https://react.dev/)
+- [Astro](https://astro.build/)
 - [Hono](https://hono.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
