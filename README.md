@@ -35,7 +35,7 @@ export const App = () => (
 )
 ```
 
-_You can create React, Astro and Hono components. You can also use Tailwind CSS._
+MistCSS can generate ⚛️ __React__, 🚀 __Astro__ and 🔥 __Hono__ components. You can use 🍃 __Tailwind CSS__ to style them.
 
 ## Documentation
 
@@ -45,6 +45,7 @@ https://typicode.github.io/mistcss
 
 - [Next.js](https://nextjs.org/)
 - [Remix](https://remix.run/)
-- [Astro](https://astro.build/)
+- [React](https://react.dev/)
 - [Hono](https://hono.dev/)
+- [Astro](https://astro.build/)
 - [Tailwind CSS](https://tailwindcss.com/)

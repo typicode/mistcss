@@ -1,5 +1,5 @@
-import { defineConfig } from 'astro/config';
-import starlight from '@astrojs/starlight';
+import { defineConfig } from 'astro/config'
+import starlight from '@astrojs/starlight'
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,10 +18,15 @@ export default defineConfig({
       },
       sidebar: [
         {
-          label: 'Basics',
+          label: 'Getting Started',
           items: [
             { label: 'Introduction', link: '/intro' },
-            { label: 'Installation', link: '/install' },
+            { label: 'Quick Start', link: '/start' },
+          ],
+        },
+        {
+          label: 'Essentials',
+          items: [
             { label: 'Writing Components', link: '/component' },
             { label: 'Ignoring Generated Files', link: '/ignore' },
           ],
