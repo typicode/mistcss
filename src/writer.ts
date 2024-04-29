@@ -4,9 +4,10 @@ import path from 'node:path'
 import { parse } from './parser.js'
 import { render as reactRender } from './renderers/react.js'
 import { render as astroRender } from './renderers/astro.js'
+import { Extension } from './types/types.js'
 
 // Create a file from a mist file
-export function createFile(mist: string, target: string, ext: string) {
+export function createFile(mist: string, target: string, ext: Extension) {
   try {
     const data = parse(fs.readFileSync(mist, 'utf8'))
     const name = path.basename(mist, '.mist.css')
@@ -14,14 +15,15 @@ export function createFile(mist: string, target: string, ext: string) {
         let result = ''
         switch (target) {
           case 'react':
+            // .tsx
             result = reactRender(name, data[0])
             break
           case 'hono':
-            ext = '.tsx'
+            // .tsx
             result = reactRender(name, data[0], true)
             break
           case 'astro':
-            ext = '.astro'
+            // .astro
             result = astroRender(name, data[0])
             break
         }

@@ -7,6 +7,7 @@ import chokidar from 'chokidar'
 import { globby } from 'globby'
 
 import { createFile } from './writer.js'
+import { Extension } from './types/types.js'
 
 function usage() {
   console.log(`Usage: mistcss <directory> [options]
@@ -51,7 +52,7 @@ if (['react', 'hono', 'astro'].includes(values.target!) === false) {
   process.exit(1)
 }
 
-let ext = ''
+let ext: Extension
 switch (values.target) {
   case 'react':
     ext = '.tsx'
@@ -65,6 +66,10 @@ switch (values.target) {
     ext = '.astro'
     console.log('Rendering Astro components')
     break
+  default:
+    console.error('Invalid render option')
+    usage()
+    process.exit(1)
 }
 
 // Change directory
