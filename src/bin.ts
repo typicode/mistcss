@@ -12,8 +12,9 @@ import { render as reactRender } from './renderers/react.js'
 import { render as astroRender } from './renderers/astro.js'
 
 type Extension = '.tsx' | '.astro'
+type Target = 'react' | 'hono' | 'astro';
 
-function createFile(mist: string, target: string, ext: Extension) {
+function createFile(mist: string, target: Target, ext: Extension) {
   try {
     const data = parse(fs.readFileSync(mist, 'utf8'))
     const name = path.basename(mist, '.mist.css')
@@ -79,7 +80,8 @@ if (!(await fsPromises.stat(dir)).isDirectory()) {
   process.exit(1)
 }
 
-if (['react', 'hono', 'astro'].includes(values.target!) === false) {
+const { target } = values;
+if (target !== 'react' && target !== 'hono' && target !== 'astro') {
   console.error('Invalid render option')
   usage()
   process.exit(1)
@@ -87,7 +89,7 @@ if (['react', 'hono', 'astro'].includes(values.target!) === false) {
 
 // Set extension
 let ext: Extension
-switch (values.target) {
+switch (target) {
   case 'react':
     ext = '.tsx'
     console.log('Rendering React components')
@@ -115,7 +117,7 @@ if (values.watch) {
   console.log('Watching for changes')
   chokidar
     .watch('**/*.mist.css')
-    .on('change', (file) => createFile(file, values.target!, ext))
+    .on('change', (file) => createFile(file, target, ext))
     .on('unlink', (file) => {
       fsPromises.unlink(file.replace(/\.css$/, ext)).catch(() => false)
     })
@@ -123,7 +125,7 @@ if (values.watch) {
 
 // Build out files
 ;(await globby('**/*.mist.css')).forEach((mist) =>
-  createFile(mist, values.target!, ext),
+  createFile(mist, target, ext),
 )
 
 // Clean out files without a matching mist file
