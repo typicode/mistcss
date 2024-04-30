@@ -1,13 +1,46 @@
 #!/usr/bin/env node
-import fs from 'node:fs/promises'
-import { existsSync } from 'node:fs'
+import fsPromises from 'node:fs/promises'
+import fs from 'node:fs'
+import path from 'node:path'
 import { parseArgs } from 'node:util'
 
 import chokidar from 'chokidar'
 import { globby } from 'globby'
 
-import { createFile } from './writer.js'
-import { Extension } from './types/types.js'
+import { parse } from './parser.js'
+import { render as reactRender } from './renderers/react.js'
+import { render as astroRender } from './renderers/astro.js'
+
+type Extension = '.tsx' | '.astro'
+
+function createFile(mist: string, target: string, ext: Extension) {
+  try {
+    const data = parse(fs.readFileSync(mist, 'utf8'))
+    const name = path.basename(mist, '.mist.css')
+    if (data[0]) {
+      let result = ''
+      switch (target) {
+        case 'react':
+          result = reactRender(name, data[0])
+          break
+        case 'hono':
+          result = reactRender(name, data[0], true)
+          break
+        case 'astro':
+          result = astroRender(name, data[0])
+          break
+      }
+      fs.writeFileSync(mist.replace(/\.css$/, ext), result)
+    }
+  } catch (e) {
+    if (e instanceof Error) {
+      console.error(`Error ${mist}: ${e.message}`)
+    } else {
+      console.error(`Error ${mist}`)
+      console.error(e)
+    }
+  }
+}
 
 function usage() {
   console.log(`Usage: mistcss <directory> [options]
@@ -40,7 +73,7 @@ if (!dir) {
   process.exit(1)
 }
 
-if (!(await fs.stat(dir)).isDirectory()) {
+if (!(await fsPromises.stat(dir)).isDirectory()) {
   console.error('The path provided is not a directory')
   usage()
   process.exit(1)
@@ -52,6 +85,7 @@ if (['react', 'hono', 'astro'].includes(values.target!) === false) {
   process.exit(1)
 }
 
+// Set extension
 let ext: Extension
 switch (values.target) {
   case 'react':
@@ -67,7 +101,7 @@ switch (values.target) {
     console.log('Rendering Astro components')
     break
   default:
-    console.error('Invalid render option')
+    console.error('Invalid target option')
     usage()
     process.exit(1)
 }
@@ -83,7 +117,7 @@ if (values.watch) {
     .watch('**/*.mist.css')
     .on('change', (file) => createFile(file, values.target!, ext))
     .on('unlink', (file) => {
-      fs.unlink(file.replace(/\.css$/, ext)).catch(() => false)
+      fsPromises.unlink(file.replace(/\.css$/, ext)).catch(() => false)
     })
 }
 
@@ -92,10 +126,10 @@ if (values.watch) {
   createFile(mist, values.target!, ext),
 )
 
-// Clean up out files without a matching mist file
+// Clean out files without a matching mist file
 ;(await globby(`**/*.mist.${ext}`)).forEach((file) => {
   const mist = file.replace(new RegExp(`\.${ext}$`), '.css')
-  if (!existsSync(mist)) {
-    fs.unlink(mist).catch(() => false)
+  if (!fs.existsSync(mist)) {
+    fsPromises.unlink(mist).catch(() => false)
   }
 })
