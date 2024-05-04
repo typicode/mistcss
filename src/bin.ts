@@ -10,9 +10,10 @@ import { globby } from 'globby'
 import { parse } from './parser.js'
 import { render as reactRender } from './renderers/react.js'
 import { render as astroRender } from './renderers/astro.js'
+import { render as vueRender } from './renderers/vue.js'
 
 type Extension = '.tsx' | '.astro'
-type Target = 'react' | 'hono' | 'astro';
+type Target = 'react' | 'hono' | 'astro' | 'vue';
 
 function createFile(mist: string, target: Target, ext: Extension) {
   try {
@@ -30,6 +31,9 @@ function createFile(mist: string, target: Target, ext: Extension) {
         case 'astro':
           result = astroRender(name, data[0])
           break
+        case 'vue':
+          result = vueRender(name, data[0])
+          break
       }
       fs.writeFileSync(mist.replace(/\.css$/, ext), result)
     }
@@ -46,7 +50,7 @@ function createFile(mist: string, target: Target, ext: Extension) {
 function usage() {
   console.log(`Usage: mistcss <directory> [options]
   --watch, -w    Watch for changes
-  --target, -t   Render target (react, hono, astro) [default: react]
+  --target, -t   Render target (react, vue, astro, hono) [default: react]
 `)
 }
 
@@ -81,7 +85,7 @@ if (!(await fsPromises.stat(dir)).isDirectory()) {
 }
 
 const { target } = values;
-if (target !== 'react' && target !== 'hono' && target !== 'astro') {
+if (target !== 'react' && target !== 'hono' && target !== 'astro' && target !== 'vue') {
   console.error('Invalid render option')
   usage()
   process.exit(1)
@@ -101,6 +105,10 @@ switch (target) {
   case 'astro':
     ext = '.astro'
     console.log('Rendering Astro components')
+    break
+  case 'vue':
+    ext = '.tsx'
+    console.log('Rendering Vue components')
     break
   default:
     console.error('Invalid target option')
