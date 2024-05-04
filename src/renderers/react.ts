@@ -22,7 +22,7 @@ function renderImports(data: Data, isHono: boolean): string {
   }
 }
 
-function renderFunction(data: Data, isHono: boolean): string {
+function renderFunction(data: Data, isClass: boolean): string {
   const args = [
     ...(hasChildren(data.tag) ? ['children'] : []),
     ...Object.keys(data.attributes).map(attributeToCamelCase),
@@ -32,7 +32,7 @@ function renderFunction(data: Data, isHono: boolean): string {
   ].join(', ')
 
   return `export function ${pascalCase(data.className)}({ ${args} }: ${hasChildren(data.tag) ? `PropsWithChildren<Props>` : `Props`}) {
-  return (${renderTag(data, '${children}', isHono ? 'class' : 'className')})
+  return (${renderTag(data, '${children}', isClass ? 'class' : 'className')})
 }`
 }
 

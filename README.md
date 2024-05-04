@@ -43,9 +43,12 @@ https://typicode.github.io/mistcss
 
 ## Supports
 
+Bring your favorite tools:
+
 - [Next.js](https://nextjs.org/)
 - [Remix](https://remix.run/)
 - [React](https://react.dev/)
-- [Hono](https://hono.dev/)
+- [Vue](https://vuejs.org)
 - [Astro](https://astro.build/)
+- [Hono](https://hono.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)

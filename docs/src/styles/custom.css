@@ -32,7 +32,3 @@
 	--sl-color-gray-7: #f1f7fe;
 	--sl-color-black: #ffffff;
 }
-
-.sl-markdown-content :is(iframe):not(:where(.not-content *)) {
-  height: 315px;
-}
