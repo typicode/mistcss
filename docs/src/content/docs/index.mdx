@@ -3,7 +3,7 @@ title: 💧 MistCSS
 description: Write components using CSS... Only!
 template: splash
 hero:
-  tagline: A new, better and faster way to write visual components.
+  tagline: Create React, Vue or Astro components with 50% less code!
     <br/><strike>CSS-in-JS?</strike> Nope! <strong>JS-from-CSS</strong> 💖
   actions:
     - text: Get Started
@@ -15,9 +15,15 @@ hero:
       icon: external
 ---
 
+import { Tweet, YouTube } from 'astro-embed';
+
 <div style="max-width: 50rem; margin: auto">
 
-### Write your component in CSS only
+### How does it work?
+
+Coding visual component by hand can be quickly repetitive and error-prone.
+
+With MistCSS, you write your component in CSS only.
 
 ```css title="Button.mist.css"
 @scope (button.custom-button) {
@@ -36,42 +42,32 @@ hero:
 }
 ```
 
-### Get a type-safe component... without writing TypeScript
+Then MistCSS will generate a type-safe component.
 
 ```jsx title="App.tsx"
 import { CustomButton } from './Button.mist'
 
-export const App = () => <CustomButton variant="primary">Save</CustomButton>
+export const App = () => (
+  <CustomButton variant="primary">Save</CustomButton>
+)
 ```
 
-MistCSS can generate ⚛️ __React__, 🚀 __Astro__ and 🔥 __Hono__ components. You can use 🍃 __Tailwind CSS__ to style them.
+MistCSS can generate ⚛️ **React**, 💚 **Vue**, 🚀 **Astro** and 🔥 **Hono** components. You can even use 🍃 **Tailwind CSS**.
 
 ### What they say
 
-<iframe
-  width="560"
-  height="315"
-  src="https://www.youtube.com/embed/9jrNwmj73F4?si=UsM9k8XXSl_1rc_c"
-  title="YouTube video player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  referrerpolicy="strict-origin-when-cross-origin"
-  allowfullscreen
-></iframe>
+<Tweet id="https://twitter.com/sebastienlorber/status/1767953769096974655" />
 
-<iframe
-  width="560"
-  height="315"
-  src="https://www.youtube.com/embed/zSlORhjh5DQ?si=aXBk_CV2tgspMaBT"
-  title="YouTube video player"
-  frameborder="0"
-  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-  referrerpolicy="strict-origin-when-cross-origin"
-  allowfullscreen
-></iframe>
+<Tweet id="https://twitter.com/argyleink/status/1769741521270583393" />
+
+<YouTube id="https://youtu.be/9jrNwmj73F4" />
+
+<YouTube id="https://youtu.be/zSlORhjh5DQ" />
 
 ## Learn more
 
-__Read [docs](intro) ✨__
+**Read [docs](intro) ✨**
 
 </div>
+
+<script async src="https://platform.twitter.com/widgets.js"></script>
