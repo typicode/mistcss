@@ -4,7 +4,9 @@ title: Tailwind CSS
 
 If Tailwind CSS is already enabled in your project, you have nothing else to do. Otherwise, please refer to your framework documentation.
 
-## Tailwind v3
+## @apply (Tailwind v3)
+
+In v3, you can use the Tailwind's `@apply` directive.
 
 ```css title="Button.mist.css"
 @scope (button.button) {
@@ -18,7 +20,7 @@ If Tailwind CSS is already enabled in your project, you have nothing else to do.
 }
 ```
 
-## Tailwind v4
+## CSS Variables (Tailwind v4)
 
 In v4, Tailwind provides CSS variables that can be used in your CSS.
 
@@ -35,11 +37,14 @@ In v4, Tailwind provides CSS variables that can be used in your CSS.
 }
 ```
 
-## Theming using CSS variables
+## JavaScript
+
+You can also import Tailwind's theme and apply it from there.
 
 ```css title="Button.mist.css"
 @scope (button.button) {
   :scope {
+    /* Expose padding and color props */
     --padding: 0;
     --color: black;
 
