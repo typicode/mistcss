@@ -35,7 +35,7 @@ export const App = () => (
 )
 ```
 
-MistCSS can generate ⚛️ __React__, 🚀 __Astro__ and 🔥 __Hono__ components. You can use 🍃 __Tailwind CSS__ to style them.
+MistCSS can generate ⚛️ __React__,  💚 __Vue__, 🚀 __Astro__ and 🔥 __Hono__ components. You can use 🍃 __Tailwind CSS__ to style them.
 
 ## Documentation
 
