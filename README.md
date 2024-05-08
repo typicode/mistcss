@@ -2,11 +2,15 @@
 
 [![Node.js CI](https://github.com/typicode/mistcss/actions/workflows/node.js.yml/badge.svg)](https://github.com/typicode/mistcss/actions/workflows/node.js.yml)
 
-> Write components using CSS only
+> Create components with 50% less code
 
 MistCSS is a new, better and faster way to write visual components. ~~CSS-in-JS~~? Nope! JS-from-CSS 👍
 
+All major frameworks are supported.
+
 ## Write your component in CSS only
+
+This CSS is the only code you'll write for your component.
 
 ```css title="Button.mist.css"
 @scope (button.custom-button) {
@@ -14,6 +18,7 @@ MistCSS is a new, better and faster way to write visual components. ~~CSS-in-JS~
     background: black;
     color: white;
 
+    /* Define component's props directly in your CSS 👇 */
     &[data-variant="primary"] {
       background: blue;
     }
