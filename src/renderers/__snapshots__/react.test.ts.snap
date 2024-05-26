@@ -9,7 +9,7 @@ import type { PropsWithChildren } from 'hono/jsx'
 type Props = { attr?: 'a' | 'b', attrFooBar?: 'foo-bar', isFoo?: boolean, propFoo?: string, propBar?: string } & JSX.IntrinsicElements['div']
 
 export function Foo({ children, attr, attrFooBar, isFoo, propFoo, propBar, ...props }: PropsWithChildren<Props>) {
-  return (<div {...props} data-attr={attr} data-attr-foo-bar={attrFooBar} data-is-foo={isFoo} style={{ '--prop-foo': propFoo, '--prop-bar': propBar }} class="foo" >\${children}</div>)
+  return (<div {...props} data-attr={attr} data-attr-foo-bar={attrFooBar} data-is-foo={isFoo} style={{ '--prop-foo': propFoo, '--prop-bar': propBar }} class="foo" >{children}</div>)
 }
 "
 `;
@@ -23,7 +23,7 @@ import type { JSX, PropsWithChildren } from 'react'
 type Props = { attr?: 'a' | 'b', attrFooBar?: 'foo-bar', isFoo?: boolean, propFoo?: string, propBar?: string } & JSX.IntrinsicElements['div']
 
 export function Foo({ children, attr, attrFooBar, isFoo, propFoo, propBar, ...props }: PropsWithChildren<Props>) {
-  return (<div {...props} data-attr={attr} data-attr-foo-bar={attrFooBar} data-is-foo={isFoo} style={{ '--prop-foo': propFoo, '--prop-bar': propBar }} className="foo" >\${children}</div>)
+  return (<div {...props} data-attr={attr} data-attr-foo-bar={attrFooBar} data-is-foo={isFoo} style={{ '--prop-foo': propFoo, '--prop-bar': propBar }} className="foo" >{children}</div>)
 }
 "
 `;
@@ -37,7 +37,7 @@ import type { JSX, PropsWithChildren } from 'react'
 type Props = {  } & JSX.IntrinsicElements['div']
 
 export function Foo({ children, ...props }: PropsWithChildren<Props>) {
-  return (<div {...props} className="foo" >\${children}</div>)
+  return (<div {...props} className="foo" >{children}</div>)
 }
 "
 `;
