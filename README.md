@@ -8,17 +8,17 @@ MistCSS is a new, better and faster way to write visual components. ~~CSS-in-JS~
 
 All major frameworks are supported.
 
-## Write your component in CSS only
+## 1. Write your component in CSS only
 
-This CSS is the only code you'll write for your component.
+`./src/Button.mist.css`
 
-```css title="Button.mist.css"
+```css
 @scope (button.custom-button) {
   :scope {
     background: black;
     color: white;
 
-    /* Define component's props directly in your CSS 👇 */
+    /* 👇 Define component's props directly in your CSS */
     &[data-variant="primary"] {
       background: blue;
     }
@@ -30,13 +30,27 @@ This CSS is the only code you'll write for your component.
 }
 ```
 
-## Get a type-safe component without writing TypeScript
+## 2. Run MistCSS codegen
 
-```jsx title="App.tsx"
+```shell
+mistcss ./src --target=react --watch
+# It will create ./src/Button.mist.tsx
+```
+
+## 3. Get a type-safe component without writing TypeScript
+
+`./src/App.tsx`
+
+```jsx
 import { CustomButton } from './Button.mist'
 
 export const App = () => (
-  <CustomButton variant="primary">Save</CustomButton>
+  <>
+    <CustomButton variant="primary">Save</CustomButton>
+
+    {/* TypeScript will catch the error */}
+    <CustomButton variant="tertiary">Cancel</CustomButton>
+  </>
 )
 ```
 
