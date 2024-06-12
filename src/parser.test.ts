@@ -2,8 +2,9 @@ import { test, expect } from 'vitest'
 
 import { parse } from './parser.js'
 
- test('parse', () => {
+test('parse', () => {
   const css = `
+    /* comment */
     @scope (div.foo) {
       :scope {
         --foo: green;
@@ -26,6 +27,7 @@ import { parse } from './parser.js'
   const actual = parse(css)
   const expected = [
     {
+      comment: 'comment',
       tag: 'div',
       className: 'foo',
       attributes: { 'data-foo': new Set(['one', 'two']) },

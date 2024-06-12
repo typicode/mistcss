@@ -1,18 +1,3 @@
-// import type { SetupContext } from 'vue'
-// import type { JSX } from 'vue/jsx-runtime'
-
-// type FComponentProps = {
-//   message?:  string
-// } & JSX.IntrinsicElements['img']
-
-// export default function FComponent(props: FComponentProps, context: SetupContext) {
-//   return (
-//     <img {...props} class="foo">
-//       {context.slots.default?.()}
-//     </img>
-//   )
-// }
-
 import { attributeToCamelCase, pascalCase, propertyToCamelCase } from './_case.js'
 import { Data } from '../parser.js'
 import { renderTag, renderPropsInterface, hasChildren } from './_common.js'
@@ -25,7 +10,10 @@ function renderFunction(data: Data): string {
     '...props',
   ].join(', ')
 
-  return `export function ${pascalCase(data.className)}({ ${args} }: Props${hasChildren(data.tag) ? ', { slots }: SetupContext' : ''}) {
+  return `/**
+* ${data.comment}
+*/
+export function ${pascalCase(data.className)}({ ${args} }: Props${hasChildren(data.tag) ? ', { slots }: SetupContext' : ''}) {
   return (${renderTag(data, '{slots.default?.()}', 'class')})
 }`
 }

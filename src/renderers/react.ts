@@ -31,7 +31,10 @@ function renderFunction(data: Data, isClass: boolean): string {
     '...props',
   ].join(', ')
 
-  return `export function ${pascalCase(data.className)}({ ${args} }: ${hasChildren(data.tag) ? `PropsWithChildren<Props>` : `Props`}) {
+  return `/**
+* ${data.comment}
+*/
+export function ${pascalCase(data.className)}({ ${args} }: ${hasChildren(data.tag) ? `PropsWithChildren<Props>` : `Props`}) {
   return (${renderTag(data, '{children}', isClass ? 'class' : 'className')})
 }`
 }
