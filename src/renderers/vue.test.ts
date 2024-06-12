@@ -6,6 +6,7 @@ import { render } from './vue.js'
 describe('render', () => {
   it('renders Vue component (full)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'div',
       className: 'foo',
       attributes: {
@@ -22,6 +23,7 @@ describe('render', () => {
 
   it('renders Vue component (minimal)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'div',
       className: 'foo',
       attributes: {},
@@ -35,6 +37,7 @@ describe('render', () => {
 
   it('renders Vue component (void element)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'hr', // hr is a void element and should not have children
       className: 'foo',
       attributes: {},

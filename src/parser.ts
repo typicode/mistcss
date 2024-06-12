@@ -4,6 +4,7 @@ import {
   Element,
   Middleware,
   middleware,
+  COMMENT,
   RULESET,
   // @ts-ignore
   SCOPE,
@@ -11,11 +12,21 @@ import {
 } from 'stylis'
 
 export interface Data {
+  comment: string
   className: string // foo
   tag: string // div
   attributes: Record<string, Set<string>> // data-foo: ['bar', 'baz']
   booleanAttributes: Set<string> // data-foo, data-bar
   properties: Set<string> // --foo, --bar
+}
+
+function getComment(element: Element): string {
+  // @ts-ignore
+  const prev = element.siblings[element.siblings.indexOf(element) - 1] as Element
+  if (prev.type === COMMENT) {
+    return (prev.children as string).trim()
+  }
+  return ''
 }
 
 // (div.foo) -> { tag: 'div', className: 'foo' }
@@ -38,7 +49,7 @@ function parseAttribute(str: string): { attribute: string; value?: string } {
 }
 
 function update(data: Data): Middleware {
-  return function (element, _index, _children, callback) {
+  return function(element, _index, _children, callback) {
     switch (element.type) {
       case DECLARATION:
         // Custom properties
@@ -48,7 +59,7 @@ function update(data: Data): Middleware {
         break
 
       case RULESET:
-        ;(element.props as string[])
+        ; (element.props as string[])
           .filter(isAttribute)
           .map(parseAttribute)
           .forEach(({ attribute, value }) => {
@@ -81,6 +92,7 @@ export function parse(css: string): Data[] {
             const { tag, className } = parseScopeSelector(prop)
 
             const data: Data = {
+              comment: getComment(element),
               tag,
               className,
               attributes: {},

@@ -6,6 +6,7 @@ import { render } from './react.js'
 describe('render', () => {
   it('renders React component (full)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'div',
       className: 'foo',
       attributes: {
@@ -22,6 +23,7 @@ describe('render', () => {
 
   it('renders React component (minimal)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'div',
       className: 'foo',
       attributes: {},
@@ -35,6 +37,7 @@ describe('render', () => {
 
   it('renders React component (void element)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'hr', // hr is a void element and should not have children
       className: 'foo',
       attributes: {},
@@ -48,6 +51,7 @@ describe('render', () => {
 
   it('renders Hono component (full)', () => {
     const data: Data = {
+      comment: 'comment',
       tag: 'div',
       className: 'foo',
       attributes: {
