@@ -22,8 +22,8 @@ export interface Data {
 
 function getComment(element: Element): string {
   // @ts-ignore
-  const prev = element.siblings[element.siblings.indexOf(element) - 1] as Element
-  if (prev.type === COMMENT) {
+  const prev = element.siblings[element.siblings.indexOf(element) - 1] as Element | undefined
+  if (prev?.type === COMMENT) {
     return (prev.children as string).trim()
   }
   return ''
