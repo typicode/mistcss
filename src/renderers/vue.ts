@@ -1,6 +1,6 @@
-import { attributeToCamelCase, pascalCase, propertyToCamelCase } from './_case.js'
 import { Data } from '../parser.js'
-import { renderTag, renderPropsInterface, hasChildren } from './_common.js'
+import { attributeToCamelCase, pascalCase, propertyToCamelCase } from './_case.js'
+import { hasChildren,renderPropsInterface, renderTag } from './_common.js'
 
 function renderFunction(data: Data): string {
   const args = [
@@ -14,7 +14,7 @@ function renderFunction(data: Data): string {
 * ${data.comment}
 */
 export function ${pascalCase(data.className)}({ ${args} }: Props${hasChildren(data.tag) ? ', { slots }: SetupContext' : ''}) {
-  return (${renderTag(data, '{slots.default?.()}', 'class')})
+  return (${renderTag(data, '{slots.default?.()}', 'class', 'object')})
 }`
 }
 

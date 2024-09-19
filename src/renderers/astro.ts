@@ -1,6 +1,6 @@
-import { attributeToCamelCase, propertyToCamelCase } from './_case.js'
 import { Data } from '../parser.js'
-import { renderTag, renderPropsInterface } from './_common.js'
+import { attributeToCamelCase, propertyToCamelCase } from './_case.js'
+import { renderPropsInterface,renderTag } from './_common.js'
 
 function renderProps(data: Data): string {
   return [
@@ -27,6 +27,6 @@ ${renderPropsInterface(data, `HTMLAttributes<'${data.tag}'>`)}
 ${renderProps(data)}
 ---
 
-${renderTag(data, '<slot />', 'class')}
+${renderTag(data, '<slot />', 'class', 'object')}
 `
 }
