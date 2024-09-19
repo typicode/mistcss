@@ -19,11 +19,11 @@ All major frameworks are supported.
     color: white;
 
     /* 👇 Define component's props directly in your CSS */
-    &[data-variant="primary"] {
+    &[data-variant='primary'] {
       background: blue;
     }
 
-    &[data-variant="secondary"] {
+    &[data-variant='secondary'] {
       background: gray;
     }
   }
@@ -54,7 +54,7 @@ export const App = () => (
 )
 ```
 
-MistCSS can generate ⚛️ __React__,  💚 __Vue__, 🚀 __Astro__ and 🔥 __Hono__ components. You can use 🍃 __Tailwind CSS__ to style them.
+MistCSS can generate ⚛️ **React**, 💚 **Vue**, 🚀 **Astro**, 🧠**Svelte** and 🔥 **Hono** components. You can use 🍃 **Tailwind CSS** to style them.
 
 ## Documentation
 
@@ -66,6 +66,7 @@ https://typicode.github.io/mistcss
 - [Remix](https://remix.run/)
 - [React](https://react.dev/)
 - [Vue](https://vuejs.org)
+- [Svelte](https://svelte.dev/)
 - [Astro](https://astro.build/)
 - [Hono](https://hono.dev/)
 - [Tailwind CSS](https://tailwindcss.com/)
