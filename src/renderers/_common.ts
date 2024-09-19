@@ -1,5 +1,5 @@
-import { attributeToCamelCase, propertyToCamelCase } from './_case.js'
 import { Data } from '../parser.js'
+import { attributeToCamelCase, propertyToCamelCase } from './_case.js'
 
 // https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 const voidElements = new Set([
@@ -65,9 +65,30 @@ export function renderPropsInterface(data: Data, extendedType: string): string {
   ].join(' ')
 }
 
+function renderSvelteStyle(properties: Data['properties']): string {
+  return Array.from(properties)
+    .map((property) => `style:${property}={${propertyToCamelCase(property)}}`)
+    .join(' ')
+}
+
+function renderStyleObject(properties: Data['properties']) {
+  return [
+    'style={{ ',
+    Array.from(properties)
+      .map((property) => `'${property}': ${propertyToCamelCase(property)}`)
+      .join(', '),
+    ' }}',
+  ].join('')
+}
+
 // Example:
 // <div {...props} data-foo={dataFoo} data-bar={dataBar} style={{ '--foo': foo, '--bar': bar }} class="foo">{children}</div>
-export function renderTag(data: Data, slotText: string, classText: string): string {
+export function renderTag(
+  data: Data,
+  slotText: string,
+  classText: string,
+  styleFormat: 'object' | 'svelte',
+): string {
   return [
     `<${data.tag}`,
     '{...props}',
@@ -86,20 +107,12 @@ export function renderTag(data: Data, slotText: string, classText: string): stri
           .join(' ')
       : null,
     data.properties.size
-      ? [
-          'style={{ ',
-          Array.from(data.properties)
-            .map(
-              (property) => `'${property}': ${propertyToCamelCase(property)}`,
-            )
-            .join(', '),
-          ' }}',
-        ].join('')
+      ? styleFormat === 'object'
+        ? renderStyleObject(data.properties)
+        : renderSvelteStyle(data.properties)
       : null,
     `${classText}="${data.className}"`,
-    hasChildren(data.tag)
-      ? [`>${slotText}</${data.tag}>`]
-      : '/>',
+    hasChildren(data.tag) ? [`>${slotText}</${data.tag}>`] : '/>',
   ]
     .filter((x) => x !== null)
     .join(' ')
