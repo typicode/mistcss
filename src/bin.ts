@@ -151,9 +151,9 @@ if (values.watch) {
 )
 
 // Clean out files without a matching mist file
-;(await globby(`**/*.mist.${ext}`)).forEach((file) => {
-  const mist = file.replace(new RegExp(`\.${ext}$`), '.css')
+;(await globby(`**/*.mist${ext}`)).forEach((file) => {
+  const mist = file.replace(new RegExp(`${ext}$`), '.css')
   if (!fs.existsSync(mist)) {
-    fsPromises.unlink(mist).catch(() => false)
+    fsPromises.unlink(file).catch(() => false)
   }
 })
