@@ -1,7 +1,6 @@
 {
-  "extends": "@sindresorhus/tsconfig",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib"
+    "outDir": "./lib",
   },
-  "exclude": ["docs", "./src/**/*.test.ts"]
 }

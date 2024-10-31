@@ -2,15 +2,12 @@
   "name": "mistcss",
   "version": "0.5.6",
   "description": "",
-  "type": "module",
-  "bin": {
-    "mistcss": "lib/bin.js"
-  },
+  "exports": "./lib/index.js",
   "scripts": {
     "build": "rm -rf lib && tsc",
     "format": "prettier --write .",
     "lint": "eslint",
-    "test": "vitest",
+    "test": "postcss test/mist.css",
     "prepublishOnly": "npm run build",
     "prepare": "husky"
   },
@@ -25,19 +22,19 @@
   "author": "typicode <typicode@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "@sindresorhus/tsconfig": "^5.0.0",
+    "@tsconfig/node18": "^18.2.4",
     "@types/node": "^20.11.19",
-    "@types/stylis": "^4.2.5",
-    "@typicode/eslint-config": "^2.0.0",
     "eslint": "^8.56.0",
     "husky": "^9.0.11",
+    "postcss": "^8.4.47",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
+    "tsx": "^4.19.2",
     "typescript": "^5.3.3",
     "vitest": "^1.5.0"
   },
   "dependencies": {
-    "chokidar": "^3.6.0",
-    "globby": "^14.0.1",
-    "stylis": "^4.3.2"
+    "postcss-selector-parser": "^6.1.2"
   }
 }
