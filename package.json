@@ -1,6 +1,6 @@
 {
   "name": "mistcss",
-  "version": "0.5.6",
+  "version": "1.0.0",
   "description": "",
   "exports": "./lib/index.js",
   "scripts": {
