@@ -166,7 +166,7 @@ Firstly, it eliminates the risk of conflicts with native attributes:
 
 ```jsx
 <>
-  <Button type="primary">Save</Button {/* Conflict with button type="submit" /*}
+  <Button type="primary">Save</Button {/* Conflict with button's type="submit" */}
   <button data-type="primary">Save</button> {/* Safe */}
 </>
 ```
@@ -216,7 +216,7 @@ If you want both basic links and button-styled links, here’s how you can do:
 ```css
 a { /* ... */ }
 
-a[data-component='button'] { /* ... */
+a[data-component='button'] { /* ... */ }
   &[data-variant='primary'] { /* ... */ }
 }
 ```
