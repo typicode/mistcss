@@ -4,7 +4,7 @@
 
 MistCSS lets you create reusable visual components without JavaScript or TypeScript (_think about it for a second... no JS/TS needed_).
 
-Leverage native HTML and CSS, get type safety and auto completion. Just clean and efficient styling.
+Leverage native HTML and CSS, get type safety and autocomplete. Just clean and efficient styling.
 
 <img width="1116" alt="Screenshot 2024-11-01 at 03 47 44" src="https://github.com/user-attachments/assets/74aea071-be00-4d03-b43a-e46d6282e4b5">
 
@@ -109,6 +109,9 @@ import './mist.css'
 
 Absolutely, MistCSS is pure HTML and CSS, generating only `mist.d.ts`, so there are no limitations. You can integrate any CSS framework seamlessly. Here are a few examples to get you started:
 
+> [!TIP]
+> To have Tailwind IntelliSense in your editor, see https://tailwindcss.com/docs/editor-setup
+
 #### Tailwind v3 ([@apply](https://tailwindcss.com/docs/functions-and-directives#apply))
 
 ```css
@@ -154,6 +157,21 @@ button {
 ### Can I do X without JavaScript?
 
 CSS is more powerful than ever, before reaching for JS, explore if native CSS features can accomplish what you need.
+
+### Can I write `<name>` instead of `data-<name>`?
+
+No, using `<name>` would result in invalid HTML. However, this constraint is actually advantageous.
+
+Firstly, it eliminates the risk of conflicts with native attributes:
+
+```jsx
+<>
+  <Button type="primary">Save</Button {/* Conflict with button type="submit" /*}
+  <button data-type="primary">Save</button> {/* Safe */}
+</>
+```
+
+Additionally, just by typing `data-` in your editor, autocomplete helps you clearly distinguish your custom attributes from standard tag attributes.
 
 ### How to write enum, boolean, string props and conditions?
 
@@ -215,6 +233,13 @@ a[data-component='button'] { /* ... */
 > [!NOTE]
 > `data-component` is just a naming convention. Feel free to use any attribute, like `data-style='button'` or `data-button`. It’s simply a way to differentiate between components using the same tag.
 
+### How to split my code?
+
+You can use CSS [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import). For example, in your `mist.css` file:
+
+```css
+@import './button.css'
+```
 
 ### How to build complex components?
 
