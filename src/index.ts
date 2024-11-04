@@ -79,7 +79,7 @@ function render(parsed: Parsed): string {
   jsxDeclaration += '  }\n}\n'
 
   // Return the full interface definitions and JSX declaration
-  return interfaceDefinitions.trim() + '\n\n' + jsxDeclaration.trim()
+  return interfaceDefinitions + jsxDeclaration
 }
 
 // Turn button[data-component='foo'] into a key that will be used for the interface name
