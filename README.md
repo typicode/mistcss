@@ -109,8 +109,8 @@ import './mist.css'
 
 Absolutely, MistCSS is pure HTML and CSS, generating only `mist.d.ts`, so there are no limitations. You can integrate any CSS framework seamlessly. Here are a few examples to get you started:
 
-> [!TIP]
-> To have Tailwind IntelliSense in your editor, see https://tailwindcss.com/docs/editor-setup
+> [!IMPORTANT]
+> For the best experience, set up Tailwind IntelliSense in your editor. Refer to [Tailwind's editor setup guide](https://tailwindcss.com/docs/editor-setup).
 
 #### Tailwind v3 ([@apply](https://tailwindcss.com/docs/functions-and-directives#apply))
 
@@ -209,7 +209,7 @@ div[data-component='section']
 />
 ```
 
-### How to re-use the same tag
+### How to re-use the same tag?
 
 If you want both basic links and button-styled links, here’s how you can do:
 
@@ -267,7 +267,7 @@ export function Card({ title, children }) {
 > [!TIP]
 > To indicate that these styles aren't meant to be used outside of `Card`, you can name them `data-p-component` (`p` for `private`) or use another naming convention.
 
-### How to define CSS variables
+### How to define CSS variables?
 
 ```css
 :root {
