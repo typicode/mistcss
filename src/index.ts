@@ -1,6 +1,7 @@
 import fs = require('node:fs')
 import { type PluginCreator } from 'postcss'
 import selectorParser = require('postcss-selector-parser');
+import atImport = require("postcss-import")
 import path = require('node:path');
 const html = require('./html')
 
@@ -104,10 +105,10 @@ function initialParsedValue(): Parsed[keyof Parsed] {
   }
 }
 
-export const mistcss: PluginCreator<{}> = (_opts = {}) => {
+const _mistcss: PluginCreator<{}> = (_opts = {}) => {
   return {
-    postcssPlugin: 'mistcss',
-    Once(root, helper) {
+    postcssPlugin: '_mistcss',
+    async Once(root, helper) {
       // Only parse mist.css file
       const from = helper.result.opts.from
       if (from === undefined || path.basename(from) !== 'mist.css') return
@@ -144,6 +145,15 @@ export const mistcss: PluginCreator<{}> = (_opts = {}) => {
       const to = path.resolve(from, '../mist.d.ts')
       fs.writeFileSync(to, rendered, 'utf-8')
     },
+  }
+}
+
+_mistcss.postcss = true
+
+export const mistcss: PluginCreator<{}> = (_opts = {}) => {
+  return {
+    postcssPlugin: 'mistcss',
+    plugins: [atImport(), _mistcss()]
   }
 }
 

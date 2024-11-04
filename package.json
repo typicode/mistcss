@@ -24,17 +24,18 @@
   "devDependencies": {
     "@tsconfig/node18": "^18.2.4",
     "@types/node": "^20.11.19",
+    "@types/postcss-import": "^14.0.3",
     "eslint": "^8.56.0",
     "husky": "^9.0.11",
     "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
-    "postcss-import": "^16.1.0",
     "prettier": "^3.2.5",
     "tsx": "^4.19.2",
     "typescript": "^5.3.3",
     "vitest": "^1.5.0"
   },
   "dependencies": {
+    "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^6.1.2"
   }
 }
