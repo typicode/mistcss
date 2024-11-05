@@ -282,6 +282,24 @@ button {
 
 See also your CSS framework/tooling documentation for ways to define them in JS if you prefer.
 
+### How to Use MistCSS with an External UI?
+
+Assuming you have your UI components in a separate package `my-ui` and you're using Next.js, follow these steps:
+
+`app/layout.tsx`
+
+```tsx
+import 'my-ui/mist.css'
+```
+
+`app/mist.d.ts`
+
+```
+import 'my-ui/mist.d.ts
+```
+
+This setup ensures that your Next.js application correctly imports styles and type definitions from your external UI package. It may vary based on tools you're using, but the same principles should apply.
+
 ### Origin of the project name?
 
 Mist is inspired by atomized water 💧 often seen near waterfalls. A nod to the _Cascading_ in CSS 🌊.
