@@ -86,14 +86,14 @@ function render(parsed: Parsed): string {
 function key(selector: selectorParser.Node): string {
   let key = ''
   if (selector.type === 'tag') {
-    key += selector.toString()
+    key += selector.toString().toLowerCase()
   }
   const next = selector.next()
   if (next?.type === 'attribute') {
     const { attribute, value } = next as selectorParser.Attribute
-    key += `_${attribute.replace('-', '_')}${value?.replace(/^/, '_').replace(' ', '_').replace('-', '_')}`
+    key += `_${attribute}_${value}`
   }
-  return key
+  return key.replace(/[^a-zA-Z0-9_]/g, '_')
 }
 
 function initialParsedValue(): Parsed[keyof Parsed] {
@@ -120,7 +120,7 @@ const _mistcss: PluginCreator<{}> = (_opts = {}) => {
           selectors.walk((selector) => {
             if (selector.type === 'tag') {
               current = parsed[key(selector)] = initialParsedValue()
-              current.tag = selector.toString()
+              current.tag = selector.toString().toLowerCase()
             }
 
             if (selector.type === 'attribute') {
@@ -134,7 +134,9 @@ const _mistcss: PluginCreator<{}> = (_opts = {}) => {
               }
             }
           })
-        }).processSync(rule.selector)
+        }).processSync(rule.selector, {
+          lossless: false,
+        })
 
         rule.walkDecls(({ prop }) => {
           if (prop.startsWith('--') && prop !== '--apply')
