@@ -7,7 +7,7 @@
     "build": "rm -rf lib && tsc",
     "format": "prettier --write .",
     "lint": "eslint",
-    "test": "postcss test/mist.css",
+    "test": "node --import tsx --test src/*.test.ts && npm run build && postcss test/mist.css",
     "prepublishOnly": "npm run build",
     "prepare": "husky"
   },

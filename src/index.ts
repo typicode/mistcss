@@ -4,6 +4,7 @@ import selectorParser = require('postcss-selector-parser');
 import atImport = require("postcss-import")
 import path = require('node:path');
 const html = require('./html')
+const key = require('./key')
 
 declare module 'postcss-selector-parser' {
   // For some reasons these aren't avaiblable in this module types
@@ -18,6 +19,7 @@ type Parsed = Record<
   string,
   {
     tag: string
+    rootAttribute: string
     attributes: Record<string, Set<string>>
     booleanAttributes: Set<string>
     properties: Set<string>
@@ -29,7 +31,7 @@ function render(parsed: Parsed): string {
   const jsxElements: Record<string, string[]> = {}
 
   Object.entries(parsed).forEach(
-    ([key, { tag, attributes, booleanAttributes, properties }]) => {
+    ([key, { tag, rootAttribute, attributes, booleanAttributes, properties }]) => {
       const interfaceName = `Mist_${key}`
 
       const attributeEntries = Object.entries(attributes)
@@ -45,7 +47,9 @@ function render(parsed: Parsed): string {
         const valueType = Array.from(values)
           .map((v) => `'${v}'`)
           .join(' | ')
-        interfaceDefinition += `  '${attr}'?: ${valueType}\n`
+        // Root attribute is used to narrow type and therefore is the only attribute
+        // that shouldn't be optional (i.e. attr: ... and not attr?: ...)
+        interfaceDefinition += `  '${attr}'${rootAttribute === attr ? '' : '?'}: ${valueType}\n`
       })
 
       booleanAttributes.forEach((attr) => {
@@ -82,23 +86,10 @@ function render(parsed: Parsed): string {
   return interfaceDefinitions + jsxDeclaration
 }
 
-// Turn button[data-component='foo'] into a key that will be used for the interface name
-function key(selector: selectorParser.Node): string {
-  let key = ''
-  if (selector.type === 'tag') {
-    key += selector.toString().toLowerCase()
-  }
-  const next = selector.next()
-  if (next?.type === 'attribute') {
-    const { attribute, value } = next as selectorParser.Attribute
-    key += `_${attribute}_${value}`
-  }
-  return key.replace(/[^a-zA-Z0-9_]/g, '_')
-}
-
 function initialParsedValue(): Parsed[keyof Parsed] {
   return {
     tag: '',
+    rootAttribute: '',
     attributes: {},
     booleanAttributes: new Set(),
     properties: new Set(),
@@ -121,6 +112,11 @@ const _mistcss: PluginCreator<{}> = (_opts = {}) => {
             if (selector.type === 'tag') {
               current = parsed[key(selector)] = initialParsedValue()
               current.tag = selector.toString().toLowerCase()
+              const next = selector.next()
+              if (next?.type === 'attribute') {
+                const { attribute, value } = next as selectorParser.Attribute
+                if (value) current.rootAttribute = attribute
+              }
             }
 
             if (selector.type === 'attribute') {
@@ -152,7 +148,7 @@ const _mistcss: PluginCreator<{}> = (_opts = {}) => {
 
 _mistcss.postcss = true
 
-export const mistcss: PluginCreator<{}> = (_opts = {}) => {
+const mistcss: PluginCreator<{}> = (_opts = {}) => {
   return {
     postcssPlugin: 'mistcss',
     plugins: [atImport(), _mistcss()]
@@ -161,5 +157,4 @@ export const mistcss: PluginCreator<{}> = (_opts = {}) => {
 
 mistcss.postcss = true
 
-// Needed to make PostCSS happy
 module.exports = mistcss

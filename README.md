@@ -214,7 +214,7 @@ div[data-component='section']
 If you want both basic links and button-styled links, here’s how you can do:
 
 ```css
-a { /* ... */ }
+a:not([data-component]) { /* ... */ }
 
 a[data-component='button'] { /* ... */ }
   &[data-variant='primary'] { /* ... */ }
@@ -231,7 +231,7 @@ a[data-component='button'] { /* ... */ }
 ```
 
 > [!NOTE]
-> `data-component` is just a naming convention. Feel free to use any attribute, like `data-style='button'` or `data-button`. It’s simply a way to differentiate between components using the same tag.
+> `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
 
 ### How to split my code?
 
