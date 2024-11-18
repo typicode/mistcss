@@ -15,8 +15,21 @@ _What you see above is standard HTML ([data-attributes](https://developer.mozill
 - 🥶 Below zero-runtime, it's zero JavaScript. Smaller bundles and faster code.
 - 💎 What you write is what you get. No transformations, easy debugging.
 - 🎒 Standards-based, reusable styles across frameworks, compatible with Tailwind or any CSS framework
-- ⚡️ Instantly productive, no learning curve, simple onboarding.
+- ⚡️ Instantly productive, no learning curve, simple on-boarding.
 - 💖 Back to basics with a modern twist: access the full power of HTML and CSS, enhanced with type safety and code completion (without the complexity).
+
+## Differences
+
+|                      | CSS-in-JS                              | MistCSS                       |
+| -------------------- | -------------------------------------- | ----------------------------- |
+| Runtime              | `~0-10 KB`                             | `0 KB`                        |
+| JavaScript functions | `1 per component`                      | `0`                           |
+| TypeScript code      | `yes (at least for props)`             | `no (generated for the user)` |
+| Debugging            | `react devtools`                       | `browser inspector`           |
+| Syntax highlighting  | `depends (may require extension)`      | `no additional extension`     |
+| Generated bundle     | `runtime + JS functions + logic + CSS` | `CSS`                         |
+
+_This is general comparison and may vary depending on the library you're using._
 
 ## Usage
 
