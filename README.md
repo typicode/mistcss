@@ -49,14 +49,16 @@ button {
 ```jsx
 <>
   <button data-variant="primary">Save</button>
-  <button data-variant="tertiary">Save</button> {/* TS error, tertiary isn't valid */}
+
+  {/* TS error, tertiary isn't valid */}
+  <button data-variant="tertiary">Save</button>
 </>
 ```
 
 Output
 
 ```jsx
-<button data-variant="primary">Save</button> {/* Same as in Page.tsx */} 
+<button data-variant="primary">Save</button> {/* Same as in Page.tsx */}
 ```
 
 _This example demonstrates enums, but MistCSS also supports boolean and string props. For more details, see the FAQ._
@@ -67,6 +69,7 @@ MistCSS parses your `mist.css` file and generates `mist.d.ts` for type safety.
 
 For instance, here’s the generated `mist.d.ts` for our button component:
 
+<!-- prettier-ignore-start -->
 ```typescript
 interface Mist_button extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   'data-variant'?: 'primary' | 'secondary'
@@ -78,6 +81,7 @@ declare namespace JSX {
   }
 }
 ```
+<!-- prettier-ignore-stop -->
 
 That’s it! Simple yet powerful, built entirely on browser standards and TypeScript/JSX.
 
@@ -132,8 +136,7 @@ button {
 
 #### Tailwind v4
 
-Tailwind v4 will support CSS variables natively (see [blog post](https://tailwindcss.com/blog/tailwindcss-v4-alpha
-)).
+Tailwind v4 will support CSS variables natively (see [blog post](https://tailwindcss.com/blog/tailwindcss-v4-alpha)).
 
 #### Tailwind (inline style)
 
@@ -190,7 +193,7 @@ div[data-component='section']
   &[data-size="lg"] { ... }
 
   /* Boolean props */
-  &[data-is-active] { ... }  
+  &[data-is-active] { ... }
 
   /* Condition: size="lg" && is-active */
   &[data-size="lg"]&[data-is-active] { ... }
@@ -216,29 +219,32 @@ If you want both basic links and button-styled links, here’s how you can do:
 ```css
 a:not([data-component]) { /* ... */ }
 
-a[data-component='button'] { /* ... */ }
+a[data-component='button'] {
   &[data-variant='primary'] { /* ... */ }
 }
 ```
 
+<!-- prettier-ignore-start -->
 ```jsx
 <>
   <a href="/home">Home</a>
   <a href="/home" data-component="button">Home</a>
   <a href="/home" data-component="button" data-variant="primary">Home</a>
-  <a href="/home" data-variant="primary">Home</a> {/* TS error, `data-variant` is only valid with `data-component="button"` */}
+
+  {/* TS error, `data-variant` is only valid with `data-component="button"` */}
+  <a href="/home" data-variant="primary">Home</a>
 </>
 ```
+<!-- prettier-ignore-stop -->
 
-> [!NOTE]
-> `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
+> [!NOTE] > `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
 
 ### How to split my code?
 
 You can use CSS [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import). For example, in your `mist.css` file:
 
 ```css
-@import './button.css'
+@import './button.css';
 ```
 
 ### How to build complex components?
@@ -246,9 +252,15 @@ You can use CSS [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@impo
 `mist.css`
 
 ```css
-article[data-component='card'] { /* ... */ }
-div[data-component='card-title'] { /* ... */ }
-div[data-component='card-content'] { /* ... */ }
+article[data-component='card'] {
+  /* ... */
+}
+div[data-component='card-title'] {
+  /* ... */
+}
+div[data-component='card-content'] {
+  /* ... */
+}
 ```
 
 `Card.jsx`
@@ -294,7 +306,7 @@ import 'my-ui/mist.css'
 
 `app/mist.d.ts`
 
-```
+```typescript
 import 'my-ui/mist.d.ts
 ```
 

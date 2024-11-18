@@ -1,8 +1,8 @@
 import fs = require('node:fs')
 import { type PluginCreator } from 'postcss'
-import selectorParser = require('postcss-selector-parser');
-import atImport = require("postcss-import")
-import path = require('node:path');
+import selectorParser = require('postcss-selector-parser')
+import atImport = require('postcss-import')
+import path = require('node:path')
 const html = require('./html')
 const key = require('./key')
 
@@ -30,49 +30,123 @@ function render(parsed: Parsed): string {
   let interfaceDefinitions = ''
   const jsxElements: Record<string, string[]> = {}
 
+  // Normalize
+  type Component = {
+    rootAttribute: string
+    discriminatorAttributes: Set<string>
+    attributes: Record<string, Set<string>>
+    booleanAttributes: Set<string>
+    properties: Set<string>
+  }
+
+  const normalized: Record<
+    string,
+    {
+      _base: Component
+      [other: string]: Component
+    }
+  > = {}
+
+  console.log(parsed)
+
   Object.entries(parsed).forEach(
-    ([key, { tag, rootAttribute, attributes, booleanAttributes, properties }]) => {
-      const interfaceName = `Mist_${key}`
-
-      const attributeEntries = Object.entries(attributes)
-
-      let htmlElement = 'HTMLElement'
-      if (tag in html) {
-        htmlElement = html[tag as keyof typeof html]
+    ([
+      key,
+      { tag, rootAttribute, attributes, booleanAttributes, properties },
+    ]) => {
+      // Default base tag, always there
+      normalized[tag] ??= {
+        _base: {
+          rootAttribute: '',
+          discriminatorAttributes: new Set<string>(),
+          attributes: {},
+          booleanAttributes: new Set<string>(),
+          properties: new Set<string>(),
+        },
       }
 
-      let interfaceDefinition = `interface ${interfaceName} extends React.DetailedHTMLProps<React.HTMLAttributes<${htmlElement}>, ${htmlElement}> {\n`
-
-      attributeEntries.forEach(([attr, values]) => {
-        const valueType = Array.from(values)
-          .map((v) => `'${v}'`)
-          .join(' | ')
-        // Root attribute is used to narrow type and therefore is the only attribute
-        // that shouldn't be optional (i.e. attr: ... and not attr?: ...)
-        interfaceDefinition += `  '${attr}'${rootAttribute === attr ? '' : '?'}: ${valueType}\n`
-      })
-
-      booleanAttributes.forEach((attr) => {
-        interfaceDefinition += `  '${attr}'?: boolean\n`
-      })
-
-      if (Array.from(properties).length > 0) {
-        const propertyEntries = Array.from(properties)
-          .map((prop) => `'${prop}': string`)
-          .join(', ')
-        interfaceDefinition += `  style?: { ${propertyEntries} } & React.CSSProperties\n`
+      if (rootAttribute !== '') {
+        normalized[tag][key] ??= {
+          rootAttribute,
+          discriminatorAttributes: new Set<string>(),
+          attributes,
+          booleanAttributes,
+          properties,
+        }
+        normalized[tag]['_base']['discriminatorAttributes'] ??= new Set()
+        normalized[tag]['_base']['discriminatorAttributes'].add(rootAttribute)
+      } else {
+        normalized[tag]['_base'] = {
+          rootAttribute,
+          discriminatorAttributes: new Set<string>(),
+          attributes,
+          booleanAttributes,
+          properties,
+        }
       }
-
-      interfaceDefinition += '}\n\n'
-
-      interfaceDefinitions += interfaceDefinition
-
-      if (!jsxElements[tag]) {
-        jsxElements[tag] = []
-      }
-      jsxElements[tag].push(interfaceName)
     },
   )
+
+  console.dir(normalized, { depth: null })
+
+  Object.entries(normalized).forEach(([tag, components]) => {
+    Object.entries(components).forEach(
+      ([
+        key,
+        {
+          rootAttribute,
+          discriminatorAttributes,
+          attributes,
+          booleanAttributes,
+          properties,
+        },
+      ]) => {
+        const interfaceName = `Mist_${key === '_base' ? tag : key}`
+
+        const attributeEntries = Object.entries(attributes)
+
+        let htmlElement = 'HTMLElement'
+        if (tag in html) {
+          htmlElement = html[tag as keyof typeof html]
+        }
+
+        let interfaceDefinition = `interface ${interfaceName} extends React.DetailedHTMLProps<React.HTMLAttributes<${htmlElement}>, ${htmlElement}> {\n`
+
+        discriminatorAttributes.forEach((attr) => {
+          interfaceDefinition += `  '${attr}'?: never\n`
+        })
+
+        attributeEntries.forEach(([attr, values]) => {
+          const valueType = Array.from(values)
+            .map((v) => `'${v}'`)
+            .join(' | ')
+          // Root attribute is used to narrow type and therefore is the only attribute
+          // that shouldn't be optional (i.e. attr: ... and not attr?: ...)
+          interfaceDefinition += `  '${attr}'${rootAttribute === attr ? '' : '?'}: ${valueType}\n`
+        })
+
+        booleanAttributes.forEach((attr) => {
+          interfaceDefinition += `  '${attr}'?: boolean\n`
+        })
+
+        if (Array.from(properties).length > 0) {
+          const propertyEntries = Array.from(properties)
+            .map((prop) => `'${prop}': string`)
+            .join(', ')
+          interfaceDefinition += `  style?: { ${propertyEntries} } & React.CSSProperties\n`
+        }
+
+        interfaceDefinition += '}\n\n'
+
+        interfaceDefinitions += interfaceDefinition
+
+        if (!jsxElements[tag]) {
+          jsxElements[tag] = []
+        }
+        jsxElements[tag].push(interfaceName)
+      },
+    )
+  })
 
   // Generate the JSX namespace declaration dynamically
   let jsxDeclaration =
@@ -151,7 +225,7 @@ _mistcss.postcss = true
 const mistcss: PluginCreator<{}> = (_opts = {}) => {
   return {
     postcssPlugin: 'mistcss',
-    plugins: [atImport(), _mistcss()]
+    plugins: [atImport(), _mistcss()],
   }
 }
 
