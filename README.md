@@ -49,8 +49,9 @@ button {
 ```jsx
 <>
   <button data-variant="primary">Save</button>
-  <button data-variant="tertiary">Save</button>{' '}
+
   {/* TS error, tertiary isn't valid */}
+  <button data-variant="tertiary">Save</button>
 </>
 ```
 
@@ -68,12 +69,9 @@ MistCSS parses your `mist.css` file and generates `mist.d.ts` for type safety.
 
 For instance, here’s the generated `mist.d.ts` for our button component:
 
+<!-- prettier-ignore-start -->
 ```typescript
-interface Mist_button
-  extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > {
+interface Mist_button extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   'data-variant'?: 'primary' | 'secondary'
 }
 
@@ -83,6 +81,7 @@ declare namespace JSX {
   }
 }
 ```
+<!-- prettier-ignore-stop -->
 
 That’s it! Simple yet powerful, built entirely on browser standards and TypeScript/JSX.
 
@@ -220,26 +219,23 @@ If you want both basic links and button-styled links, here’s how you can do:
 ```css
 a:not([data-component]) { /* ... */ }
 
-a[data-component='button'] { /* ... */ }
+a[data-component='button'] {
   &[data-variant='primary'] { /* ... */ }
 }
 ```
 
+<!-- prettier-ignore-start -->
 ```jsx
 <>
   <a href="/home">Home</a>
-  <a href="/home" data-component="button">
-    Home
-  </a>
-  <a href="/home" data-component="button" data-variant="primary">
-    Home
-  </a>
-  <a href="/home" data-variant="primary">
-    Home
-  </a>{' '}
+  <a href="/home" data-component="button">Home</a>
+  <a href="/home" data-component="button" data-variant="primary">Home</a>
+
   {/* TS error, `data-variant` is only valid with `data-component="button"` */}
+  <a href="/home" data-variant="primary">Home</a>
 </>
 ```
+<!-- prettier-ignore-stop -->
 
 > [!NOTE] > `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
 
@@ -310,7 +306,7 @@ import 'my-ui/mist.css'
 
 `app/mist.d.ts`
 
-```
+```typescript
 import 'my-ui/mist.d.ts
 ```
 
