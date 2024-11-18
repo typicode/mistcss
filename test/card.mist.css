@@ -1,0 +1,12 @@
+/* Testing union discriminator */
+div[data-component='card'] {
+  background: gray;
+  &[data-size='sm'] {
+  }
+  &[data-size='xl'] {
+  }
+}
+
+div[data-component='card-title'] {
+  background: gray;
+}

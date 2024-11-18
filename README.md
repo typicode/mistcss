@@ -49,14 +49,15 @@ button {
 ```jsx
 <>
   <button data-variant="primary">Save</button>
-  <button data-variant="tertiary">Save</button> {/* TS error, tertiary isn't valid */}
+  <button data-variant="tertiary">Save</button>{' '}
+  {/* TS error, tertiary isn't valid */}
 </>
 ```
 
 Output
 
 ```jsx
-<button data-variant="primary">Save</button> {/* Same as in Page.tsx */} 
+<button data-variant="primary">Save</button> {/* Same as in Page.tsx */}
 ```
 
 _This example demonstrates enums, but MistCSS also supports boolean and string props. For more details, see the FAQ._
@@ -68,7 +69,11 @@ MistCSS parses your `mist.css` file and generates `mist.d.ts` for type safety.
 For instance, here’s the generated `mist.d.ts` for our button component:
 
 ```typescript
-interface Mist_button extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
+interface Mist_button
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   'data-variant'?: 'primary' | 'secondary'
 }
 
@@ -132,8 +137,7 @@ button {
 
 #### Tailwind v4
 
-Tailwind v4 will support CSS variables natively (see [blog post](https://tailwindcss.com/blog/tailwindcss-v4-alpha
-)).
+Tailwind v4 will support CSS variables natively (see [blog post](https://tailwindcss.com/blog/tailwindcss-v4-alpha)).
 
 #### Tailwind (inline style)
 
@@ -190,7 +194,7 @@ div[data-component='section']
   &[data-size="lg"] { ... }
 
   /* Boolean props */
-  &[data-is-active] { ... }  
+  &[data-is-active] { ... }
 
   /* Condition: size="lg" && is-active */
   &[data-size="lg"]&[data-is-active] { ... }
@@ -224,21 +228,27 @@ a[data-component='button'] { /* ... */ }
 ```jsx
 <>
   <a href="/home">Home</a>
-  <a href="/home" data-component="button">Home</a>
-  <a href="/home" data-component="button" data-variant="primary">Home</a>
-  <a href="/home" data-variant="primary">Home</a> {/* TS error, `data-variant` is only valid with `data-component="button"` */}
+  <a href="/home" data-component="button">
+    Home
+  </a>
+  <a href="/home" data-component="button" data-variant="primary">
+    Home
+  </a>
+  <a href="/home" data-variant="primary">
+    Home
+  </a>{' '}
+  {/* TS error, `data-variant` is only valid with `data-component="button"` */}
 </>
 ```
 
-> [!NOTE]
-> `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
+> [!NOTE] > `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
 
 ### How to split my code?
 
 You can use CSS [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@import). For example, in your `mist.css` file:
 
 ```css
-@import './button.css'
+@import './button.css';
 ```
 
 ### How to build complex components?
@@ -246,9 +256,15 @@ You can use CSS [@import](https://developer.mozilla.org/en-US/docs/Web/CSS/@impo
 `mist.css`
 
 ```css
-article[data-component='card'] { /* ... */ }
-div[data-component='card-title'] { /* ... */ }
-div[data-component='card-content'] { /* ... */ }
+article[data-component='card'] {
+  /* ... */
+}
+div[data-component='card-title'] {
+  /* ... */
+}
+div[data-component='card-content'] {
+  /* ... */
+}
 ```
 
 `Card.jsx`
