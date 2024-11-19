@@ -47,8 +47,6 @@ function render(parsed: Parsed): string {
     }
   > = {}
 
-  console.log(parsed)
-
   Object.entries(parsed).forEach(
     ([
       key,
@@ -86,8 +84,6 @@ function render(parsed: Parsed): string {
       }
     },
   )
-
-  console.dir(normalized, { depth: null })
 
   Object.entries(normalized).forEach(([tag, components]) => {
     Object.entries(components).forEach(
