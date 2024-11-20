@@ -12,7 +12,7 @@ _What you see above is standard HTML ([data-attributes](https://developer.mozill
 
 ## Features
 
-- 🥶 Below zero-runtime, it's zero JavaScript. Smaller bundles and faster code.
+- 🥶 Not just zero-runtime, it goes beyond. It's zero JavaScript, not even for components, resulting in smaller bundles and faster code.
 - 💎 What you write is what you get. No transformations, easy debugging.
 - 🎒 Standards-based, reusable styles across frameworks, compatible with Tailwind or any CSS framework
 - ⚡️ Instantly productive, no learning curve, simple on-boarding.
@@ -23,7 +23,7 @@ _What you see above is standard HTML ([data-attributes](https://developer.mozill
 |                      | CSS-in-JS                              | MistCSS                       |
 | -------------------- | -------------------------------------- | ----------------------------- |
 | Runtime              | `~0-10 KB`                             | `0 KB`                        |
-| JavaScript functions | `1 per component`                      | `0`                           |
+| JavaScript functions | `a few KB per component`               | `0 KB`                        |
 | TypeScript code      | `yes (at least for props)`             | `no (generated for the user)` |
 | Debugging            | `react devtools`                       | `browser inspector`           |
 | Syntax highlighting  | `depends (may require extension)`      | `no additional extension`     |
