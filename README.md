@@ -250,7 +250,8 @@ a[data-component='button'] {
 ```
 <!-- prettier-ignore-stop -->
 
-> [!NOTE] > `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
+> [!NOTE]
+> `data-component` is just a naming convention. Feel free to use any attribute, like `data-kind='button'` or just `data-c`. It’s simply a way to differentiate between components using the same tag.
 
 ### How to split my code?
 
