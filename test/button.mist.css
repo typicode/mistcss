@@ -1,4 +1,5 @@
 button {
+  --highlightColor: rebeccapurple;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   font-weight: bold;
