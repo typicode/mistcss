@@ -1,5 +1,6 @@
 interface Mist_button extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   'data-variant'?: 'primary' | 'secondary'
+  style?: { '--highlightColor'?: string } & React.CSSProperties
 }
 
 interface Mist_div extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {

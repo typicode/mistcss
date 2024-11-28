@@ -127,7 +127,7 @@ function render(parsed: Parsed): string {
 
         if (Array.from(properties).length > 0) {
           const propertyEntries = Array.from(properties)
-            .map((prop) => `'${prop}': string`)
+            .map((prop) => `'${prop}'?: string`)
             .join(', ')
           interfaceDefinition += `  style?: { ${propertyEntries} } & React.CSSProperties\n`
         }
