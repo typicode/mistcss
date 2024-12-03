@@ -3,7 +3,6 @@ import { type PluginCreator } from 'postcss'
 import selectorParser = require('postcss-selector-parser')
 import atImport = require('postcss-import')
 import path = require('node:path')
-const html = require('./html')
 const key = require('./key')
 
 declare module 'postcss-selector-parser' {
@@ -27,7 +26,11 @@ type Parsed = Record<
 >
 
 function render(parsed: Parsed): string {
-  let interfaceDefinitions = ''
+  let interfaceDefinitions = `type ReactHTMLProps<
+  Tag extends keyof React.ReactHTML
+> = React.ReactHTML[Tag] extends React.DetailedHTMLFactory<infer Attributes, infer Element>
+  ? React.DetailedHTMLProps<Attributes, Element>
+  : React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>\n\n`
   const jsxElements: Record<string, string[]> = {}
 
   // Normalize
@@ -101,12 +104,7 @@ function render(parsed: Parsed): string {
 
         const attributeEntries = Object.entries(attributes)
 
-        let htmlElement = 'HTMLElement'
-        if (tag in html) {
-          htmlElement = html[tag as keyof typeof html]
-        }
-
-        let interfaceDefinition = `interface ${interfaceName} extends React.DetailedHTMLProps<React.HTMLAttributes<${htmlElement}>, ${htmlElement}> {\n`
+        let interfaceDefinition = `interface ${interfaceName} extends ReactHTMLProps<'${tag}'> {\n`
 
         discriminatorAttributes.forEach((attr) => {
           interfaceDefinition += `  '${attr}'?: never\n`
