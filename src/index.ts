@@ -173,6 +173,8 @@ export function parse(css: string): Parsed {
   const root = postcss.parse(css)
   
   root.walkRules((rule) => {
+    const entriesForRule: Array<Parsed[keyof Parsed]> = []
+    
     selectorParser((selectors) => {
       selectors.walk((selector) => {
         if (selector.type === 'tag') {
@@ -183,6 +185,7 @@ export function parse(css: string): Parsed {
             const { attribute, value } = next as selectorParser.Attribute
             if (value) current.rootAttribute = attribute
           }
+          entriesForRule.push(current)
         }
 
         if (selector.type === 'attribute') {
@@ -200,9 +203,19 @@ export function parse(css: string): Parsed {
       lossless: false,
     })
 
+    // Apply declarations to all entries collected for this rule
+    // If we collected entries (multi-selector), apply to all
+    // Otherwise apply to current (nested selector case)
     rule.walkDecls(({ prop }) => {
-      if (prop.startsWith('--') && prop !== '--apply')
-        current.properties.add(prop)
+      if (prop.startsWith('--') && prop !== '--apply') {
+        if (entriesForRule.length > 0) {
+          for (const entry of entriesForRule) {
+            entry.properties.add(prop)
+          }
+        } else {
+          current.properties.add(prop)
+        }
+      }
     })
   })
   

@@ -139,4 +139,18 @@ test('parse', async (t) => {
     assert.ok(!parsed.button.properties.has('--apply'))
     assert.equal(parsed.button.properties.size, 1)
   })
+
+  await t.test('handles multi-selector rules', () => {
+    const css = `
+      button, a {
+        --shared-color: blue;
+      }
+    `
+    const parsed = parse(css)
+    
+    assert.ok(parsed.button, 'Should have button entry')
+    assert.ok(parsed.a, 'Should have a entry')
+    assert.ok(parsed.button.properties.has('--shared-color'), 'button should have --shared-color')
+    assert.ok(parsed.a.properties.has('--shared-color'), 'a should have --shared-color')
+  })
 })
