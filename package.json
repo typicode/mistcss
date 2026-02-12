@@ -28,7 +28,6 @@
     "@types/postcss-import": "^14.0.3",
     "eslint": "^8.56.0",
     "husky": "^9.0.11",
-    "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "prettier": "^3.2.5",
     "tsx": "^4.19.2",
@@ -36,6 +35,7 @@
     "vitest": "^1.5.0"
   },
   "dependencies": {
+    "postcss": "^8.4.47",
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^6.1.2",
     "ts-morph": "^27.0.2"
