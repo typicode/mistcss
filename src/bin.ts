@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util'
-import { parse } from './index'
+import type { Parsed } from './index'
+const { parse } = require('./index')
 
 async function main() {
   // Parse command line arguments (no args expected for now)
@@ -28,7 +29,7 @@ async function main() {
 
   // Convert Sets to Arrays for JSON serialization
   const serializable = Object.fromEntries(
-    Object.entries(parsed).map(([key, value]) => [
+    (Object.entries(parsed) as [string, Parsed[string]][]).map(([key, value]) => [
       key,
       {
         ...value,
