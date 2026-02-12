@@ -193,4 +193,134 @@ test('stats', async (t) => {
       fs.rmSync(tempDir, { recursive: true, force: true })
     }
   })
+
+  await t.test('counts by rootAttribute values', () => {
+    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    
+    try {
+      const tsconfigPath = path.join(tempDir, 'tsconfig.json')
+      fs.writeFileSync(
+        tsconfigPath,
+        JSON.stringify({
+          compilerOptions: {
+            jsx: 'react',
+            target: 'ES2015',
+          },
+        })
+      )
+
+      const testFile = path.join(tempDir, 'test.tsx')
+      fs.writeFileSync(
+        testFile,
+        `
+        export function App() {
+          return (
+            <div>
+              <button>Regular button</button>
+              <button data-variant="primary">Primary button</button>
+              <button data-variant="secondary">Secondary button</button>
+              <button data-variant="primary">Another primary</button>
+            </div>
+          )
+        }
+      `
+      )
+
+      const parsed: Parsed = {
+        button: {
+          tag: 'button',
+          rootAttribute: '',
+          attributes: {},
+          booleanAttributes: new Set(),
+          properties: new Set(),
+        },
+        button_data_variant_primary: {
+          tag: 'button',
+          rootAttribute: 'data-variant',
+          attributes: {
+            'data-variant': new Set(['primary']),
+          },
+          booleanAttributes: new Set(),
+          properties: new Set(),
+        },
+        button_data_variant_secondary: {
+          tag: 'button',
+          rootAttribute: 'data-variant',
+          attributes: {
+            'data-variant': new Set(['secondary']),
+          },
+          booleanAttributes: new Set(),
+          properties: new Set(),
+        },
+      }
+
+      const result = stats(parsed, tsconfigPath)
+
+      assert.equal(result.button, 1, 'Should count 1 regular button without data-variant')
+      assert.equal(result.button_data_variant_primary, 2, 'Should count 2 primary variant buttons')
+      assert.equal(result.button_data_variant_secondary, 1, 'Should count 1 secondary variant button')
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true })
+    }
+  })
+
+  await t.test('distinguishes between elements with and without rootAttribute', () => {
+    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    
+    try {
+      const tsconfigPath = path.join(tempDir, 'tsconfig.json')
+      fs.writeFileSync(
+        tsconfigPath,
+        JSON.stringify({
+          compilerOptions: {
+            jsx: 'react',
+            target: 'ES2015',
+          },
+        })
+      )
+
+      const testFile = path.join(tempDir, 'test.tsx')
+      fs.writeFileSync(
+        testFile,
+        `
+        export function App() {
+          return (
+            <div>
+              <div>Regular div</div>
+              <div data-component="card">Card component</div>
+              <div data-component="card">Another card</div>
+            </div>
+          )
+        }
+      `
+      )
+
+      const parsed: Parsed = {
+        div: {
+          tag: 'div',
+          rootAttribute: '',
+          attributes: {},
+          booleanAttributes: new Set(),
+          properties: new Set(),
+        },
+        div_data_component_card: {
+          tag: 'div',
+          rootAttribute: 'data-component',
+          attributes: {
+            'data-component': new Set(['card']),
+          },
+          booleanAttributes: new Set(),
+          properties: new Set(),
+        },
+      }
+
+      const result = stats(parsed, tsconfigPath)
+
+      assert.equal(result.div, 2, 'Should count 2 regular divs (parent + one child without data-component)')
+      assert.equal(result.div_data_component_card, 2, 'Should count 2 div elements with data-component="card"')
+    } finally {
+      fs.rmSync(tempDir, { recursive: true, force: true })
+    }
+  })
 })
+
