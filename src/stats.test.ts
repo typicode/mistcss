@@ -4,11 +4,12 @@ import { stats } from './stats'
 import type { Parsed } from './index'
 import fs = require('node:fs')
 import path = require('node:path')
+import os = require('node:os')
 
 test('stats', async (t) => {
   await t.test('counts tag usage in a simple TSX file', () => {
     // Create a temporary test project
-    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mistcss-test-'))
     
     try {
       // Create a tsconfig.json
@@ -79,7 +80,7 @@ test('stats', async (t) => {
   })
 
   await t.test('returns zero counts for unused tags', () => {
-    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mistcss-test-'))
     
     try {
       const tsconfigPath = path.join(tempDir, 'tsconfig.json')
@@ -130,7 +131,7 @@ test('stats', async (t) => {
   })
 
   await t.test('handles self-closing JSX elements', () => {
-    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mistcss-test-'))
     
     try {
       const tsconfigPath = path.join(tempDir, 'tsconfig.json')
@@ -195,7 +196,7 @@ test('stats', async (t) => {
   })
 
   await t.test('counts by rootAttribute values', () => {
-    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mistcss-test-'))
     
     try {
       const tsconfigPath = path.join(tempDir, 'tsconfig.json')
@@ -265,7 +266,7 @@ test('stats', async (t) => {
   })
 
   await t.test('distinguishes between elements with and without rootAttribute', () => {
-    const tempDir = fs.mkdtempSync('/tmp/mistcss-test-')
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mistcss-test-'))
     
     try {
       const tsconfigPath = path.join(tempDir, 'tsconfig.json')

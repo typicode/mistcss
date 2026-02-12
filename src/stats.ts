@@ -1,4 +1,4 @@
-import { Project, SyntaxKind } from 'ts-morph'
+import { Project, SyntaxKind, JsxOpeningElement, JsxSelfClosingElement, JsxAttribute } from 'ts-morph'
 import type { Parsed } from './index'
 
 export type Stats = Record<string, number>
@@ -42,7 +42,7 @@ export function stats(parsed: Parsed, projectPath: string): Stats {
 }
 
 function countElement(
-  element: any,
+  element: JsxOpeningElement | JsxSelfClosingElement,
   parsed: Parsed,
   counts: Stats
 ): void {
@@ -68,9 +68,10 @@ function countElement(
         const otherEntry = parsed[otherKey]
         if (otherEntry.tag === tagName && otherEntry.rootAttribute) {
           // Check if current element has this rootAttribute
-          const attr = attributes.find((a: any) => {
+          const attr = attributes.find((a) => {
             if (a.getKind() === SyntaxKind.JsxAttribute) {
-              const attrName = a.getNameNode().getText()
+              const jsxAttr = a as JsxAttribute
+              const attrName = jsxAttr.getNameNode().getText()
               return attrName === otherEntry.rootAttribute
             }
             return false
@@ -88,9 +89,10 @@ function countElement(
       }
     } else {
       // Has rootAttribute - check if element has this attribute with matching value
-      const attr = attributes.find((a: any) => {
+      const attr = attributes.find((a) => {
         if (a.getKind() === SyntaxKind.JsxAttribute) {
-          const attrName = a.getNameNode().getText()
+          const jsxAttr = a as JsxAttribute
+          const attrName = jsxAttr.getNameNode().getText()
           return attrName === entry.rootAttribute
         }
         return false
@@ -98,7 +100,8 @@ function countElement(
       
       if (attr) {
         // Check if the attribute value matches any of the expected values
-        const initializer = attr.getInitializer()
+        const jsxAttr = attr as JsxAttribute
+        const initializer = jsxAttr.getInitializer()
         if (initializer) {
           const value = initializer.getText().replace(/^["']|["']$/g, '')
           const expectedValues = entry.attributes[entry.rootAttribute]
