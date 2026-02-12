@@ -217,41 +217,8 @@ const _mistcss: PluginCreator<{}> = (_opts = {}) => {
       const from = helper.result.opts.from
       if (from === undefined || path.basename(from) !== 'mist.css') return
 
-      const parsed: Parsed = {}
-      let current: Parsed[keyof Parsed] = initialParsedValue()
-      root.walkRules((rule) => {
-        selectorParser((selectors) => {
-          selectors.walk((selector) => {
-            if (selector.type === 'tag') {
-              current = parsed[key(selector)] = initialParsedValue()
-              current.tag = selector.toString().toLowerCase()
-              const next = selector.next()
-              if (next?.type === 'attribute') {
-                const { attribute, value } = next as selectorParser.Attribute
-                if (value) current.rootAttribute = attribute
-              }
-            }
-
-            if (selector.type === 'attribute') {
-              const { attribute, value } = selector as selectorParser.Attribute
-              if (value) {
-                const values = (current.attributes[attribute] ??=
-                  new Set<string>())
-                values.add(value)
-              } else {
-                current.booleanAttributes.add(attribute)
-              }
-            }
-          })
-        }).processSync(rule.selector, {
-          lossless: false,
-        })
-
-        rule.walkDecls(({ prop }) => {
-          if (prop.startsWith('--') && prop !== '--apply')
-            current.properties.add(prop)
-        })
-      })
+      const css = root.toString()
+      const parsed = parse(css)
       const rendered = render(parsed)
       const to = path.resolve(from, '../mist.d.ts')
       fs.writeFileSync(to, rendered, 'utf-8')
