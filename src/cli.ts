@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { parseArgs } from 'node:util'
-import fs = require('node:fs')
 import { parse } from './index'
 
 async function main() {
@@ -25,7 +24,7 @@ async function main() {
   }
 
   // Parse the CSS
-  const parsed = await parse(css)
+  const parsed = parse(css)
 
   // Convert Sets to Arrays for JSON serialization
   const serializable = Object.fromEntries(

@@ -165,7 +165,7 @@ function initialParsedValue(): Parsed[keyof Parsed] {
   }
 }
 
-export async function parse(css: string): Promise<Parsed> {
+export function parse(css: string): Parsed {
   const parsed: Parsed = {}
   let current: Parsed[keyof Parsed] = initialParsedValue()
   
