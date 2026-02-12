@@ -3,6 +3,7 @@
   "version": "1.0.6",
   "description": "",
   "exports": "./lib/index.js",
+  "bin": "./lib/cli.js",
   "scripts": {
     "build": "rm -rf lib && tsc",
     "format": "prettier --write .",

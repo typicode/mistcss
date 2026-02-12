@@ -1,5 +1,6 @@
 import fs = require('node:fs')
 import { type PluginCreator } from 'postcss'
+import postcss = require('postcss')
 import selectorParser = require('postcss-selector-parser')
 import atImport = require('postcss-import')
 import path = require('node:path')
@@ -14,7 +15,7 @@ declare module 'postcss-selector-parser' {
   }
 }
 
-type Parsed = Record<
+export type Parsed = Record<
   string,
   {
     tag: string
@@ -164,6 +165,50 @@ function initialParsedValue(): Parsed[keyof Parsed] {
   }
 }
 
+export async function parse(css: string): Promise<Parsed> {
+  const parsed: Parsed = {}
+  let current: Parsed[keyof Parsed] = initialParsedValue()
+  
+  // Parse the CSS using postcss
+  const root = postcss.parse(css)
+  
+  root.walkRules((rule) => {
+    selectorParser((selectors) => {
+      selectors.walk((selector) => {
+        if (selector.type === 'tag') {
+          current = parsed[key(selector)] = initialParsedValue()
+          current.tag = selector.toString().toLowerCase()
+          const next = selector.next()
+          if (next?.type === 'attribute') {
+            const { attribute, value } = next as selectorParser.Attribute
+            if (value) current.rootAttribute = attribute
+          }
+        }
+
+        if (selector.type === 'attribute') {
+          const { attribute, value } = selector as selectorParser.Attribute
+          if (value) {
+            const values = (current.attributes[attribute] ??=
+              new Set<string>())
+            values.add(value)
+          } else {
+            current.booleanAttributes.add(attribute)
+          }
+        }
+      })
+    }).processSync(rule.selector, {
+      lossless: false,
+    })
+
+    rule.walkDecls(({ prop }) => {
+      if (prop.startsWith('--') && prop !== '--apply')
+        current.properties.add(prop)
+    })
+  })
+  
+  return parsed
+}
+
 const _mistcss: PluginCreator<{}> = (_opts = {}) => {
   return {
     postcssPlugin: '_mistcss',
@@ -225,4 +270,7 @@ const mistcss: PluginCreator<{}> = (_opts = {}) => {
 
 mistcss.postcss = true
 
+export { mistcss as default }
 module.exports = mistcss
+module.exports.parse = parse
+module.exports.default = mistcss

@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+import { parseArgs } from 'node:util'
+import fs = require('node:fs')
+import { parse } from './index'
+
+async function main() {
+  // Parse command line arguments (no args expected for now)
+  parseArgs({
+    args: process.argv.slice(2),
+    options: {},
+    strict: true,
+  })
+
+  // Read CSS from stdin
+  let css = ''
+  
+  if (process.stdin.isTTY) {
+    console.error('Error: Please provide CSS via stdin')
+    console.error('Usage: mistcss < input.css')
+    process.exit(1)
+  }
+
+  for await (const chunk of process.stdin) {
+    css += chunk
+  }
+
+  // Parse the CSS
+  const parsed = await parse(css)
+
+  // Convert Sets to Arrays for JSON serialization
+  const serializable = Object.fromEntries(
+    Object.entries(parsed).map(([key, value]) => [
+      key,
+      {
+        ...value,
+        attributes: Object.fromEntries(
+          Object.entries(value.attributes).map(([k, v]) => [k, Array.from(v)])
+        ),
+        booleanAttributes: Array.from(value.booleanAttributes),
+        properties: Array.from(value.properties),
+      },
+    ])
+  )
+
+  // Output the parsed result as JSON
+  console.log(JSON.stringify(serializable, null, 2))
+}
+
+main().catch((err) => {
+  console.error('Error:', err.message)
+  process.exit(1)
+})
