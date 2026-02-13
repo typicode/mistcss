@@ -1,9 +1,14 @@
 import fs = require('node:fs')
-import { type PluginCreator } from 'postcss'
+import postcss = require('postcss')
 import selectorParser = require('postcss-selector-parser')
 import atImport = require('postcss-import')
 import path = require('node:path')
-const key = require('./key')
+import keyModule = require('./key')
+
+type PluginCreator<PluginOptions> =
+  import('postcss').PluginCreator<PluginOptions>
+type Root = import('postcss').Root
+const key = keyModule as unknown as (selector: selectorParser.Node) => string
 
 declare module 'postcss-selector-parser' {
   // For some reasons these aren't avaiblable in this module types
@@ -14,7 +19,7 @@ declare module 'postcss-selector-parser' {
   }
 }
 
-type Parsed = Record<
+export type Parsed = Record<
   string,
   {
     tag: string
@@ -164,6 +169,71 @@ function initialParsedValue(): Parsed[keyof Parsed] {
   }
 }
 
+function parseRoot(root: Root): Parsed {
+  const parsed: Parsed = {}
+  let current: Parsed[keyof Parsed] = initialParsedValue()
+
+  root.walkRules((rule) => {
+    const entriesForRule: Array<Parsed[keyof Parsed]> = []
+
+    selectorParser((selectors) => {
+      selectors.walk((selector) => {
+        if (selector.type === 'tag') {
+          current = parsed[key(selector)] = initialParsedValue()
+          current.tag = selector.toString().toLowerCase()
+          const next = selector.next()
+          if (next?.type === 'attribute') {
+            const { attribute, value } = next as selectorParser.Attribute
+            if (value) current.rootAttribute = attribute
+          }
+          entriesForRule.push(current)
+        }
+
+        if (selector.type === 'attribute') {
+          const { attribute, value } = selector as selectorParser.Attribute
+          if (value) {
+            const values = (current.attributes[attribute] ??= new Set<string>())
+            values.add(value)
+          } else {
+            current.booleanAttributes.add(attribute)
+          }
+        }
+      })
+    }).processSync(rule.selector, {
+      lossless: false,
+    })
+
+    // Apply declarations to all entries collected for this rule
+    // If we collected entries (multi-selector), apply to all
+    // Otherwise apply to current (nested selector case)
+    rule.walkDecls(({ prop }) => {
+      if (prop.startsWith('--') && prop !== '--apply') {
+        if (entriesForRule.length > 0) {
+          for (const entry of entriesForRule) {
+            entry.properties.add(prop)
+          }
+        } else {
+          current.properties.add(prop)
+        }
+      }
+    })
+  })
+
+  return parsed
+}
+
+export function parse(css: string): Parsed {
+  return parseRoot(postcss.parse(css))
+}
+
+export async function parseFile(cssFilePath: string): Promise<Parsed> {
+  const css = fs.readFileSync(cssFilePath, 'utf-8')
+  const result = await postcss([atImport()]).process(css, {
+    from: cssFilePath,
+  })
+  return parseRoot(postcss.parse(result.css))
+}
+
 const _mistcss: PluginCreator<{}> = (_opts = {}) => {
   return {
     postcssPlugin: '_mistcss',
@@ -172,41 +242,8 @@ const _mistcss: PluginCreator<{}> = (_opts = {}) => {
       const from = helper.result.opts.from
       if (from === undefined || path.basename(from) !== 'mist.css') return
 
-      const parsed: Parsed = {}
-      let current: Parsed[keyof Parsed] = initialParsedValue()
-      root.walkRules((rule) => {
-        selectorParser((selectors) => {
-          selectors.walk((selector) => {
-            if (selector.type === 'tag') {
-              current = parsed[key(selector)] = initialParsedValue()
-              current.tag = selector.toString().toLowerCase()
-              const next = selector.next()
-              if (next?.type === 'attribute') {
-                const { attribute, value } = next as selectorParser.Attribute
-                if (value) current.rootAttribute = attribute
-              }
-            }
-
-            if (selector.type === 'attribute') {
-              const { attribute, value } = selector as selectorParser.Attribute
-              if (value) {
-                const values = (current.attributes[attribute] ??=
-                  new Set<string>())
-                values.add(value)
-              } else {
-                current.booleanAttributes.add(attribute)
-              }
-            }
-          })
-        }).processSync(rule.selector, {
-          lossless: false,
-        })
-
-        rule.walkDecls(({ prop }) => {
-          if (prop.startsWith('--') && prop !== '--apply')
-            current.properties.add(prop)
-        })
-      })
+      const css = root.toString()
+      const parsed = parse(css)
       const rendered = render(parsed)
       const to = path.resolve(from, '../mist.d.ts')
       fs.writeFileSync(to, rendered, 'utf-8')
@@ -225,4 +262,8 @@ const mistcss: PluginCreator<{}> = (_opts = {}) => {
 
 mistcss.postcss = true
 
+export { mistcss as default }
 module.exports = mistcss
+module.exports.parse = parse
+module.exports.parseFile = parseFile
+module.exports.default = mistcss

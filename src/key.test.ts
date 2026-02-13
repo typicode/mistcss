@@ -1,11 +1,11 @@
-import assert from 'node:assert/strict'
-import test from 'node:test'
-import selectorParser = require('postcss-selector-parser');
-import key = require('./key');
+import assert = require('node:assert/strict')
+import selectorParser = require('postcss-selector-parser')
+import key = require('./key')
 
 const parser = selectorParser()
+const test: typeof import('node:test').test = require('node:test')
 
-test("key", async (t) => {
+test('key', async (t) => {
   const arr: [string, string | ErrorConstructor][] = [
     ['div', 'div'],
     ['div[data-foo="bar"]', 'div_data_foo_bar'],
@@ -16,7 +16,7 @@ test("key", async (t) => {
     ['div[data-1]', 'div_data_1'],
     ['  div[ data-foo ]  ', 'div_data_foo'],
     ['div:not([data-component])', 'div'],
-    ['div[data-foo=" bar"]', 'div_data_foo__bar']
+    ['div[data-foo=" bar"]', 'div_data_foo__bar'],
   ]
   for (const [input, expected] of arr) {
     await t.test(`${input} → ${expected}`, () => {

@@ -3,8 +3,10 @@
   "version": "1.0.6",
   "description": "",
   "exports": "./lib/index.js",
+  "bin": "./lib/bin.js",
   "scripts": {
     "build": "rm -rf lib && tsc",
+    "cli:test": "node --import tsx src/bin.ts test/mist.css --stats --tsconfig test/tsconfig.stats.json --pretty",
     "format": "prettier --write .",
     "lint": "eslint",
     "test": "node --import tsx --test src/*.test.ts && npm run build && postcss test/mist.css",
@@ -27,7 +29,6 @@
     "@types/postcss-import": "^14.0.3",
     "eslint": "^8.56.0",
     "husky": "^9.0.11",
-    "postcss": "^8.4.47",
     "postcss-cli": "^11.0.0",
     "prettier": "^3.2.5",
     "tsx": "^4.19.2",
@@ -35,7 +36,11 @@
     "vitest": "^1.5.0"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "postcss": "^8.4.47",
     "postcss-import": "^16.1.0",
-    "postcss-selector-parser": "^6.1.2"
+    "postcss-selector-parser": "^6.1.2",
+    "table": "^6.9.0",
+    "ts-morph": "^27.0.2"
   }
 }
