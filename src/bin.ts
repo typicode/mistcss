@@ -44,15 +44,9 @@ const { values, positionals } = parseArgs({
 function formatPrettyStats(parsed: Parsed, result: StatsResult): string {
   const rows: string[][] = [[chalk.cyan('Selector'), chalk.cyan('Count')]]
 
-  // Sort entries by count in descending order
-  const sortedEntries = Object.entries(parsed).sort((a, b) => {
-    const statA = result[a[0]]
-    const statB = result[b[0]]
-    if (!statA && !statB) return 0
-    if (!statA) return 1
-    if (!statB) return -1
-    return statB.count - statA.count
-  })
+  const sortedEntries = Object.entries(parsed).sort(
+    ([a], [b]) => result[b].count - result[a].count,
+  )
 
   for (const [key, entry] of sortedEntries) {
     const stat = result[key]
@@ -120,11 +114,7 @@ async function main(): Promise<void> {
     if (values.pretty) {
       console.log(formatPrettyStats(parsed, statsResult))
     } else {
-      // Sort by count in descending order for JSON output
-      const sortedStats = Object.fromEntries(
-        Object.entries(statsResult).sort((a, b) => b[1].count - a[1].count),
-      )
-      console.log(JSON.stringify(sortedStats, null, 2))
+      console.log(JSON.stringify(statsResult, null, 2))
     }
     return
   }
