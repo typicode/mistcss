@@ -6,6 +6,7 @@
   "bin": "./lib/bin.js",
   "scripts": {
     "build": "rm -rf lib && tsc",
+    "cli:test": "node --import tsx src/bin.ts test/mist.css --stats --tsconfig test/tsconfig.stats.json --pretty",
     "format": "prettier --write .",
     "lint": "eslint",
     "test": "node --import tsx --test src/*.test.ts && npm run build && postcss test/mist.css",
@@ -35,9 +36,11 @@
     "vitest": "^1.5.0"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
     "postcss": "^8.4.47",
     "postcss-import": "^16.1.0",
     "postcss-selector-parser": "^6.1.2",
+    "table": "^6.9.0",
     "ts-morph": "^27.0.2"
   }
 }

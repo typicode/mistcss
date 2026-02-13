@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",
+    "outDir": "./lib"
   },
+  "exclude": ["test/index.tsx"]
 }

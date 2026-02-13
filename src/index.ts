@@ -1,10 +1,14 @@
 import fs = require('node:fs')
-import { type PluginCreator } from 'postcss'
 import postcss = require('postcss')
 import selectorParser = require('postcss-selector-parser')
 import atImport = require('postcss-import')
 import path = require('node:path')
-const key = require('./key')
+import keyModule = require('./key')
+
+type PluginCreator<PluginOptions> =
+  import('postcss').PluginCreator<PluginOptions>
+type Root = import('postcss').Root
+const key = keyModule as unknown as (selector: selectorParser.Node) => string
 
 declare module 'postcss-selector-parser' {
   // For some reasons these aren't avaiblable in this module types
@@ -165,16 +169,13 @@ function initialParsedValue(): Parsed[keyof Parsed] {
   }
 }
 
-export function parse(css: string): Parsed {
+function parseRoot(root: Root): Parsed {
   const parsed: Parsed = {}
   let current: Parsed[keyof Parsed] = initialParsedValue()
-  
-  // Parse the CSS using postcss
-  const root = postcss.parse(css)
-  
+
   root.walkRules((rule) => {
     const entriesForRule: Array<Parsed[keyof Parsed]> = []
-    
+
     selectorParser((selectors) => {
       selectors.walk((selector) => {
         if (selector.type === 'tag') {
@@ -191,8 +192,7 @@ export function parse(css: string): Parsed {
         if (selector.type === 'attribute') {
           const { attribute, value } = selector as selectorParser.Attribute
           if (value) {
-            const values = (current.attributes[attribute] ??=
-              new Set<string>())
+            const values = (current.attributes[attribute] ??= new Set<string>())
             values.add(value)
           } else {
             current.booleanAttributes.add(attribute)
@@ -218,8 +218,20 @@ export function parse(css: string): Parsed {
       }
     })
   })
-  
+
   return parsed
+}
+
+export function parse(css: string): Parsed {
+  return parseRoot(postcss.parse(css))
+}
+
+export async function parseFile(cssFilePath: string): Promise<Parsed> {
+  const css = fs.readFileSync(cssFilePath, 'utf-8')
+  const result = await postcss([atImport()]).process(css, {
+    from: cssFilePath,
+  })
+  return parseRoot(postcss.parse(result.css))
 }
 
 const _mistcss: PluginCreator<{}> = (_opts = {}) => {
@@ -253,4 +265,5 @@ mistcss.postcss = true
 export { mistcss as default }
 module.exports = mistcss
 module.exports.parse = parse
+module.exports.parseFile = parseFile
 module.exports.default = mistcss

@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "target": "ES2015"
+  },
+  "include": ["./index.tsx"]
+}
